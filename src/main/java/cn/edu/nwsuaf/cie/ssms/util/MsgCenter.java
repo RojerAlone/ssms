@@ -2,6 +2,7 @@ package cn.edu.nwsuaf.cie.ssms.util;
 
 /**
  * Created by zhangrenjie on 2017-11-28
+ * 消息字典，存放所有返回的消息
  */
 public class MsgCenter {
 
