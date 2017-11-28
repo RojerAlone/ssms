@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS `ssms`.`ground` (
 CREATE TABLE IF NOT EXISTS `ssms`.`closeinfo` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `type` INT COMMENT '场馆类型',
-  `start_time` TIMESTAMP NOT NULL COMMENT '不开放开始时间',
-  `end_time` TIMESTAMP DEFAULT NULL COMMENT '不开放结束时间，如果为空表示整天都不开放',
+  `start_time` DATETIME NOT NULL COMMENT '不开放开始时间',
+  `end_time` DATETIME DEFAULT NULL COMMENT '不开放结束时间，如果为空表示整天都不开放',
   `reason` VARCHAR(100) DEFAULT NULL COMMENT '不开放原因',
   PRIMARY KEY (`id`)
 ) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '场馆不开放信息';
@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS `ssms`.`order` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '订单ID',
   `gid` INT NOT NULL COMMENT '场地ID',
   `uid` LONG NOT NULL COMMENT '学工号',
-  `start_time` TIMESTAMP NOT NULL COMMENT '开始时间',
-  `end_time` TIMESTAMP NOT NULL COMMENT '结束时间',
+  `start_time` DATETIME NOT NULL COMMENT '开始时间',
+  `end_time` DATETIME NOT NULL COMMENT '结束时间',
   `total` INT NOT NULL DEFAULT 0 COMMENT '订单价钱',
   `pay_type` INT NOT NULL DEFAULT 0 COMMENT '支付方式，0 表示一卡通支付，1 表示支付宝支付，2 表示微信支付，默认为校园卡支付',
   `stat` INT NOT NULL DEFAULT 0 COMMENT '订单状态，0 表示正常，1 表示已使用，2 表示已取消',
@@ -33,5 +33,6 @@ CREATE TABLE IF NOT EXISTS `ssms`.`order` (
 
 CREATE TABLE IF NOT EXISTS `ssms`.`longorder` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '订单ID',
-  `gid` INT NOT NULL
+  `gid` INT NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '长期预订信息';

@@ -1,6 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.service;
 
 import cn.edu.nwsuaf.cie.ssms.model.Result;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by zhangrenjie on 2017-11-28
