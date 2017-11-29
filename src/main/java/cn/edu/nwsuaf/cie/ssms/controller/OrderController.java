@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "order")
-public class OrderController {
+public class OrderController extends AbstractController {
 
     @Autowired
     private OrderService orderService;

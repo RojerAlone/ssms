@@ -1,5 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.model;
 
+import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
+
 /**
  * Created by zhangrenjie on 2017-11-28
  */
@@ -21,6 +23,10 @@ public class Result {
 
     public static Result success(Object result) {
         return new Result(true, result);
+    }
+
+    public static Result success() {
+        return new Result(true, MsgCenter.OK);
     }
 
     public static Result error(String msg) {

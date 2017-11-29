@@ -1,5 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.util;
 
+import org.springframework.stereotype.Component;
+
 import javax.annotation.PreDestroy;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -9,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by zhangrenjie on 2017-11-28
  */
+@Component
 public class CommonCache {
 
     /**

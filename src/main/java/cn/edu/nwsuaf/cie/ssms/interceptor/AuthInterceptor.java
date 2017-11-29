@@ -1,5 +1,6 @@
 package cn.edu.nwsuaf.cie.ssms.interceptor;
 
+import cn.edu.nwsuaf.cie.ssms.controller.AbstractController;
 import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.util.CommonCache;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
@@ -51,5 +52,12 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         userHolder.remove();
+        /*
+          在 AbstractController 的 ThreadLocal 中存储了 HttpServletRequest 方便使用，
+          但是 Spring 没有提供一个像 @ModelAttribute 这样的注解可以在每个 RequestMapping 方法执行完毕之后执行方法的注解
+          （也就是说 @ModelAttribute 可以在每个请求方法执行之前执行 @ModelAttribute 注解的方法，但是没有一个对应的注解可以在
+          每个请求方法执行之后执行注解的方法，所以只能放在拦截器中进行 ThreadLocal 的清除工作了。
+         */
+        AbstractController.remove();
     }
 }
