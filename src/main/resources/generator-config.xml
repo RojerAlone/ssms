@@ -29,18 +29,19 @@
         <table tableName="ground"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false" />
+               selectByExampleQueryId="false" enableDeleteByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false" enableInsert="false"/>
         <table tableName="order"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false" />
+               selectByExampleQueryId="false" enableDeleteByPrimaryKey="false"/>
         <table tableName="longorder"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false" />
+               selectByExampleQueryId="false"/>
         <table tableName="closeinfo"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false" />
+               selectByExampleQueryId="false"/>
     </context>
 </generatorConfiguration>

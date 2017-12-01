@@ -8,4 +8,5 @@ spring:
     username: root
     password: 654321
     schema: classpath:db-schema.sql
+    data: classpath:db-data.sql
     continue-on-error: true # 数据库脚本执行失败的时候忽略错误继续启动程序

@@ -3,6 +3,8 @@ package cn.edu.nwsuaf.cie.ssms.service;
 import cn.edu.nwsuaf.cie.ssms.model.Result;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * Created by zhangrenjie on 2017-11-28
  */
@@ -13,7 +15,7 @@ public interface OrderService {
      * @param uid
      * @param gid
      */
-    Result order(String uid, int gid);
+    Result order(String uid, int gid, Date startTime, Date endTime);
 
     /**
      * 取消预订

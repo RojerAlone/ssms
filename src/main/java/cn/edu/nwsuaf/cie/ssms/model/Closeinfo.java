@@ -13,6 +13,8 @@ public class Closeinfo {
 
     private String reason;
 
+    private Integer stat;
+
     public Integer getId() {
         return id;
     }
@@ -51,5 +53,13 @@ public class Closeinfo {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public Integer getStat() {
+        return stat;
+    }
+
+    public void setStat(Integer stat) {
+        this.stat = stat;
     }
 }

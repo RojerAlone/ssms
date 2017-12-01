@@ -3,9 +3,25 @@ package cn.edu.nwsuaf.cie.ssms.model;
 import java.util.Date;
 
 public class Order {
+
+    /**
+     * 订单未支付，默认状态
+     */
+    public static final int STAT_NOT_PAY = 0;
+    /**
+     * 订单已支付
+     */
+    public static final int STAT_PAIED = 1;
+    /**
+     * 订单已取消
+     */
+    public static final int STAT_CANCEL = 2;
+
     private Integer id;
 
     private Integer gid;
+
+    private String uid;
 
     private Date startTime;
 
@@ -18,8 +34,6 @@ public class Order {
     private Integer stat;
 
     private Date ctime;
-
-    private String uid;
 
     public Integer getId() {
         return id;
@@ -35,6 +49,14 @@ public class Order {
 
     public void setGid(Integer gid) {
         this.gid = gid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public Date getStartTime() {
@@ -83,13 +105,5 @@ public class Order {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 }

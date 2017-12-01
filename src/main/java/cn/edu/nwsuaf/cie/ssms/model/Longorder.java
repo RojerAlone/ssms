@@ -5,6 +5,8 @@ public class Longorder {
 
     private Integer gid;
 
+    private Integer stat;
+
     public Integer getId() {
         return id;
     }
@@ -19,5 +21,13 @@ public class Longorder {
 
     public void setGid(Integer gid) {
         this.gid = gid;
+    }
+
+    public Integer getStat() {
+        return stat;
+    }
+
+    public void setStat(Integer stat) {
+        this.stat = stat;
     }
 }
