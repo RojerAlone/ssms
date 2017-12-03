@@ -1,6 +1,6 @@
 package cn.edu.nwsuaf.cie.ssms.service;
 
-import cn.edu.nwsuaf.cie.ssms.model.Result;
+import cn.edu.nwsuaf.cie.ssms.util.Result;
 
 /**
  * Created by zhangrenjie on 2017-11-29

@@ -1,17 +1,8 @@
 package cn.edu.nwsuaf.cie.ssms.mapper;
 
-import cn.edu.nwsuaf.cie.ssms.model.Closeinfo;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface CloseinfoMapper {
-    int deleteByPrimaryKey(Integer id);
 
-    int insert(Closeinfo record);
-
-    int insertSelective(Closeinfo record);
-
-    Closeinfo selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(Closeinfo record);
-
-    int updateByPrimaryKey(Closeinfo record);
 }

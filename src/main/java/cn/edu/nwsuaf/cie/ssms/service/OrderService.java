@@ -1,7 +1,6 @@
 package cn.edu.nwsuaf.cie.ssms.service;
 
-import cn.edu.nwsuaf.cie.ssms.model.Result;
-import org.springframework.stereotype.Service;
+import cn.edu.nwsuaf.cie.ssms.util.Result;
 
 import java.util.Date;
 

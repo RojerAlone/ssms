@@ -5,6 +5,7 @@ import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.util.CommonCache;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * 用户身份验证拦截器，从 cookie 中获取 token，如果用户是已经登录的，那么将用户信息保存在 UserHolder 中
  * 请求结束后要将用户信息从 UserHolder 中删除
  */
+@Component
 public class AuthInterceptor implements HandlerInterceptor {
 
     @Autowired

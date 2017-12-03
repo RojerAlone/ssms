@@ -1,6 +1,4 @@
-package cn.edu.nwsuaf.cie.ssms.model;
-
-import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
+package cn.edu.nwsuaf.cie.ssms.util;
 
 /**
  * Created by zhangrenjie on 2017-11-28
