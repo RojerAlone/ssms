@@ -55,6 +55,7 @@ public class OrderServiceTest {
         Date endTime = sdf.parse("2017-12-03 16:00");
         Result result = orderService.order(uid, gid, startDate, endTime);
         LOGGER.debug("order : {}", result);
+        assert(result.isSuccess());
     }
 
 }
