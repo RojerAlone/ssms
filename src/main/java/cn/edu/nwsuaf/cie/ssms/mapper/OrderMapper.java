@@ -17,18 +17,23 @@ public interface OrderMapper {
     @Select("select * from `order` where id = #{id}")
     Order selectByPrimaryKey(Integer id);
 
-    @Select("select count(*) from `order` where `gid` = #{gid} and " +
-            "(`start_time` >= #{endTime} or `end_time` <= #{startTime}) and `stat` != #{stat}")
-    int selectOrderNumsBetweenTimeByGroundAndExcludeStat(@Param(value = "gid") Integer ground,
-                                                         @Param(value = "startTime") Date startTime,
-                                                         @Param(value = "endTime") Date endTime,
-                                                         @Param(value = "stat") Integer stat);
+    @Select("select count(`id`) from `order` where `gid` = #{gid} and `stat` != #{stat} " +
+            "and (`start_time` <= #{startTime} and `end_time` >= #{startTime}) " +
+            "or (`start_time` <= #{endTime} and `end_time` >= #{endTime})")
+    int selectNumsBetweenTimeByGroundAndExcludeStat(@Param(value = "gid") Integer ground,
+                                                    @Param(value = "startTime") Date startTime,
+                                                    @Param(value = "endTime") Date endTime,
+                                                    @Param(value = "stat") Integer stat);
+
+    @Update("update `order` set stat=#{stat} where id = #{id}")
+    int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);
 
     @UpdateProvider(type = SQLBuilder.class, method = "buildUpdate")
-    int updateByPrimaryKeySelective(Order record);
+    int updateByPrimaryKeySelective(Order order);
+
 
     class SQLBuilder {
-        String buildUpdate(final Order order) {
+        public String buildUpdate(final Order order) {
             return new SQL() {
                 {
                     UPDATE("order");

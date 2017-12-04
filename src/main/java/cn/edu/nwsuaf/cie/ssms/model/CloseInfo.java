@@ -2,7 +2,7 @@ package cn.edu.nwsuaf.cie.ssms.model;
 
 import java.util.Date;
 
-public class Closeinfo {
+public class CloseInfo {
     private Integer id;
 
     private Integer type;

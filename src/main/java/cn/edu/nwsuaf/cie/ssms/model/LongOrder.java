@@ -1,9 +1,15 @@
 package cn.edu.nwsuaf.cie.ssms.model;
 
-public class Longorder {
+import java.util.Date;
+
+public class LongOrder {
     private Integer id;
 
     private Integer gid;
+
+    private Date startTime;
+
+    private Date endTime;
 
     private Integer stat;
 
@@ -21,6 +27,22 @@ public class Longorder {
 
     public void setGid(Integer gid) {
         this.gid = gid;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public Integer getStat() {

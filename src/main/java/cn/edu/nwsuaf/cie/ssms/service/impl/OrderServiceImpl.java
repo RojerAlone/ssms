@@ -7,6 +7,7 @@ import cn.edu.nwsuaf.cie.ssms.model.Order;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
+import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
         }
         try {
             lock.lock();
-            if (orderMapper.selectOrderNumsBetweenTimeByGroundAndExcludeStat(gid, startTime, endTime, Order.STAT_PAIED) > 0) {
+            if (orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(gid, startTime, endTime, Order.STAT_CANCEL) > 0) {
                 return Result.error(MsgCenter.GROUND_ORDERED);
             }
             Order order = new Order();
@@ -46,9 +47,9 @@ public class OrderServiceImpl implements OrderService {
             order.setStartTime(startTime);
             order.setEndTime(endTime);
             if (userHolder.getUser().isStudent()) {
-                order.setTotal(Price.STUDENT_PRICE * (int)(endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60));
+                order.setTotal((int) (Price.STUDENT_PRICE * (endTime.getTime() - startTime.getTime()) / TimeUtil.ONE_HOUR));
             } else {
-                order.setTotal(Price.TEACHER_PRICE * (int)(endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60));
+                order.setTotal((int) (Price.TEACHER_PRICE * (endTime.getTime() - startTime.getTime()) / TimeUtil.ONE_HOUR));
             }
             if (orderMapper.insert(order) == 1) {
                 return Result.success(order.getId());
@@ -63,11 +64,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Result cancel(String uid, int orderId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
-        if (order == null || !order.getUid().equals(uid)) {
+        if (order == null || !order.getUid().equals(uid) || order.getStat().equals(Order.STAT_CANCEL)) {
             return Result.error(MsgCenter.ERROR_PARAMS);
         }
-        order.setStat(Order.STAT_CANCEL);
-        if (orderMapper.updateByPrimaryKeySelective(order) == 1) {
+        if (order.getStartTime().getTime() - System.currentTimeMillis() < TimeUtil.ONE_DAY) {
+            return Result.error(MsgCenter.ORDER_CANCEL_FAILED);
+        }
+        if (orderMapper.updateStatById(orderId, Order.STAT_CANCEL) == 1) {
             return Result.success();
         } else {
             return Result.error(MsgCenter.SERVER_INNER_ERROR);

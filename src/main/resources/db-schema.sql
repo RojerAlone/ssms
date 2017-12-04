@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS `ssms`.`order` (
 CREATE TABLE IF NOT EXISTS `ssms`.`longorder` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '订单ID',
   `gid` INT NOT NULL,
+  `start_time` DATETIME NOT NULL COMMENT '开始时间',
+  `end_time` DATETIME DEFAULT NULL COMMENT '结束时间，如果为空表示占用该场地一整天',
   `stat` INT NOT NULL DEFAULT 0 COMMENT '0 表示正常，1 表示已删除',
   PRIMARY KEY (`id`)
 ) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '长期预订信息';

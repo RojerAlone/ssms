@@ -6,16 +6,10 @@ import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
@@ -54,8 +48,14 @@ public class OrderServiceTest {
         Date startDate = sdf.parse("2017-12-03 14:00");
         Date endTime = sdf.parse("2017-12-03 16:00");
         Result result = orderService.order(uid, gid, startDate, endTime);
-        LOGGER.debug("order : {}", result);
-        assert(result.isSuccess());
+        LOGGER.info("order : {}", result);
+    }
+
+    @Test
+    public void cancel() throws Exception {
+        int order = 1;
+        Result result = orderService.cancel(userHolder.getUser().getUid(), order);
+        LOGGER.info("order : {}", result);
     }
 
 }

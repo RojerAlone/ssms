@@ -14,4 +14,6 @@ public class MsgCenter {
 
     public static final String ERROR_PARAMS = "参数错误，请重试";
 
+    public static final String ORDER_CANCEL_FAILED = "订单生效前 1 天内禁止取消订单";
+
 }
