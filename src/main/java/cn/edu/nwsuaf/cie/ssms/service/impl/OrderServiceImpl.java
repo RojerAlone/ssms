@@ -32,24 +32,24 @@ public class OrderServiceImpl implements OrderService {
     private UserHolder userHolder;
 
     @Override
-    public Result order(String uid, int gid, Date startTime, Date endTime) {
-        if (groundMapper.selectByPrimaryKey(gid) == null || StringUtils.isEmpty(uid) || !checkTime(startTime, endTime)) {
+    public Result order(String uid, int gid, long startTime, long endTime) {
+        if (groundMapper.selectByPrimaryKey(gid) == null || StringUtils.isEmpty(uid) || !TimeUtil.checkTime(startTime, endTime)) {
             return Result.error(MsgCenter.ERROR_PARAMS);
         }
         try {
             lock.lock();
-            if (orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(gid, startTime, endTime, Order.STAT_CANCEL) > 0) {
+            if (orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(gid, new Date(startTime), new Date(endTime), Order.STAT_CANCEL) > 0) {
                 return Result.error(MsgCenter.GROUND_ORDERED);
             }
             Order order = new Order();
             order.setGid(gid);
             order.setUid(uid);
-            order.setStartTime(startTime);
-            order.setEndTime(endTime);
+            order.setStartTime(new Date(startTime));
+            order.setEndTime(new Date(endTime));
             if (userHolder.getUser().isStudent()) {
-                order.setTotal((int) (Price.STUDENT_PRICE * (endTime.getTime() - startTime.getTime()) / TimeUtil.ONE_HOUR));
+                order.setTotal((int) (Price.STUDENT_PRICE * (endTime - startTime) / TimeUtil.ONE_HOUR));
             } else {
-                order.setTotal((int) (Price.TEACHER_PRICE * (endTime.getTime() - startTime.getTime()) / TimeUtil.ONE_HOUR));
+                order.setTotal((int) (Price.TEACHER_PRICE * (endTime - startTime) / TimeUtil.ONE_HOUR));
             }
             if (orderMapper.insert(order) == 1) {
                 return Result.success(order.getId());
@@ -82,11 +82,4 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
-
-    /**
-     * 检测时间是否合法（开始时间在结束时间之前同时时间差是整时的）
-     */
-    private boolean checkTime(Date startTime, Date endTime) {
-        return startTime.before(endTime) && ((endTime.getTime() - startTime.getTime()) % (1000 * 60 * 60)) == 0;
-    }
 }

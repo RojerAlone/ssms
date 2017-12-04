@@ -1,5 +1,6 @@
 package cn.edu.nwsuaf.cie.ssms.service.impl;
 
+import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.service.UserService;
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result login(String uid, String authToken) {
         // TODO 判断合法的 authToken
-        if (uid.length() != 10) {
+        if (uid.length() != User.UID_LENGTH) {
             return Result.error(MsgCenter.ERROR_PARAMS);
         }
         return Result.success(UUID.randomUUID().toString().replaceAll("-", ""));

@@ -5,6 +5,8 @@ package cn.edu.nwsuaf.cie.ssms.model;
  */
 public class User {
 
+    public static final int UID_LENGTH = 10;
+
     private String uid;
 
     private boolean student;
