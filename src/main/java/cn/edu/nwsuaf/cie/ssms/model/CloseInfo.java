@@ -3,6 +3,11 @@ package cn.edu.nwsuaf.cie.ssms.model;
 import java.util.Date;
 
 public class CloseInfo {
+
+    public static final int STAT_OK = 0;
+
+    public static final int STAT_DEL = 1;
+
     private Integer id;
 
     private Integer gid;
