@@ -14,6 +14,9 @@ public interface CloseInfoMapper {
     @InsertProvider(type = SQLBuilder.class, method = "buildInsert")
     int insert(CloseInfo closeInfo);
 
+    @Select("select * from closeinfo where stat = #{stat}")
+    List<CloseInfo> selectByStat(int stat);
+
     @Update("update closeinfo set stat = #{stat} where id = #{id}")
     int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);
 
@@ -27,10 +30,11 @@ public interface CloseInfoMapper {
     List<Order> selectByStatAndTime(@Param(value = "stat") int stat, @Param(value = "startTime") Date startTime);
 
     class SQLBuilder {
-        public String buildInsert(CloseInfo closeInfo) {
+        public String buildInsert(final CloseInfo closeInfo) {
             return new SQL(){{
                 INSERT_INTO("closeinfo");
-                VALUES("type", String.valueOf(closeInfo.getType()));
+                VALUES("gid", String.valueOf(closeInfo.getGid()));
+                VALUES("close_date", closeInfo.getCloseDate().toString());
                 VALUES("start_time", closeInfo.getStartTime().toString());
                 if (closeInfo.getEndTime() != null) {
                     VALUES("end_time", closeInfo.getEndTime().toString());

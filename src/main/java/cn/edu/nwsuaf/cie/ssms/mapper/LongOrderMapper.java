@@ -1,9 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.mapper;
 
 import cn.edu.nwsuaf.cie.ssms.model.LongOrder;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;
@@ -17,16 +15,22 @@ public interface LongOrderMapper {
     @Select("select * from longorder where stat = #{stat}")
     List<LongOrder> selectByStat(int stat);
 
+    @Update("update longorder set stat = #{stat} where id = #{id}")
+    int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);
+
     class SQLBuilder {
-        public String buildInsert(LongOrder order) {
+        public String buildInsert(final LongOrder order) {
             return new SQL(){
                 {
                     INSERT_INTO("longorder");
                     VALUES("gid", String.valueOf(order.getGid()));
+                    VALUES("start_date", order.getStartDate().toString());
+                    VALUES("end_date", order.getEndDate().toString());
                     VALUES("startTime", order.getStartTime().toString());
                     if (order.getEndTime() != null) {
                         VALUES("endTime", order.getEndTime().toString());
                     }
+                    VALUES("weekday", String.valueOf(order.getWeekday()));
                 }
             }.toString();
         }

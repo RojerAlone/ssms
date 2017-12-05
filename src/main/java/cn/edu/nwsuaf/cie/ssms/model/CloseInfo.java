@@ -5,7 +5,9 @@ import java.util.Date;
 public class CloseInfo {
     private Integer id;
 
-    private Integer type;
+    private Integer gid;
+
+    private Date closeDate;
 
     private Date startTime;
 
@@ -23,12 +25,20 @@ public class CloseInfo {
         this.id = id;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getGid() {
+        return gid;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setGid(Integer gid) {
+        this.gid = gid;
+    }
+
+    public Date getCloseDate() {
+        return closeDate;
+    }
+
+    public void setCloseDate(Date closeDate) {
+        this.closeDate = closeDate;
     }
 
     public Date getStartTime() {

@@ -7,9 +7,15 @@ public class LongOrder {
 
     private Integer gid;
 
+    private Date startDate;
+
+    private Date endDate;
+
     private Date startTime;
 
     private Date endTime;
+
+    private int weekday;
 
     private Integer stat;
 
@@ -29,6 +35,22 @@ public class LongOrder {
         this.gid = gid;
     }
 
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     public Date getStartTime() {
         return startTime;
     }
@@ -43,6 +65,14 @@ public class LongOrder {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public int getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(int weekday) {
+        this.weekday = weekday;
     }
 
     public Integer getStat() {

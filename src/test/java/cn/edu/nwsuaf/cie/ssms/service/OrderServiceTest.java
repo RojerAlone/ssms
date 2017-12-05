@@ -45,9 +45,11 @@ public class OrderServiceTest {
         int gid = 1;
         String uid = "2014012597";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        Date startDate = sdf.parse("2017-12-03 14:00");
-        Date endTime = sdf.parse("2017-12-03 16:00");
-        Result result = orderService.order(uid, gid, startDate, endTime);
+        String startTimeStr = "2017-12-03 14:00";
+        String endTimeStr = "2017-12-03 16:00";
+        long startTime = sdf.parse(startTimeStr).getTime();
+        long endTime = sdf.parse(endTimeStr).getTime();
+        Result result = orderService.order(uid, gid, startTime, endTime);
         LOGGER.info("order : {}", result);
     }
 
