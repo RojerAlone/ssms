@@ -4,6 +4,7 @@ import cn.edu.nwsuaf.cie.ssms.model.LongOrder;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -14,6 +15,9 @@ public interface LongOrderMapper {
 
     @Select("select * from longorder where stat = #{stat}")
     List<LongOrder> selectByStat(int stat);
+
+    @Select("select * from longorder where stat = #{stat} and #{date} between start_date and end_date")
+    List<LongOrder> selectByStatAndDate(@Param("stat") int stat, @Param("date") Date date);
 
     @Update("update longorder set stat = #{stat} where id = #{id}")
     int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);

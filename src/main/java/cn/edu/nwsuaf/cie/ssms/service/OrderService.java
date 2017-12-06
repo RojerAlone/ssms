@@ -9,23 +9,16 @@ public interface OrderService {
 
     /**
      * 预订场地
-     * @param uid
-     * @param gid
      */
-    Result order(String uid, int gid, long startTime, long endTime);
+    Result order(int gid, long startTime, long endTime);
 
     /**
      * 取消预订
-     * @param uid
-     * @param orderId
-     * @return
      */
-    Result cancel(String uid, int orderId);
+    Result cancel(int orderId);
 
     /**
      * 支付订单
-     * @param orderId
-     * @return
      */
     Result pay(int orderId);
 

@@ -49,14 +49,14 @@ public class OrderServiceTest {
         String endTimeStr = "2017-12-03 16:00";
         long startTime = sdf.parse(startTimeStr).getTime();
         long endTime = sdf.parse(endTimeStr).getTime();
-        Result result = orderService.order(uid, gid, startTime, endTime);
+        Result result = orderService.order(gid, startTime, endTime);
         LOGGER.info("order : {}", result);
     }
 
     @Test
     public void cancel() throws Exception {
         int order = 1;
-        Result result = orderService.cancel(userHolder.getUser().getUid(), order);
+        Result result = orderService.cancel(order);
         LOGGER.info("order : {}", result);
     }
 

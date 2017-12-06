@@ -31,6 +31,10 @@ public class Result {
         return new Result(false, msg);
     }
 
+    public static Result innerError() {
+        return new Result(false, MsgCenter.SERVER_INNER_ERROR);
+    }
+
     public boolean isSuccess() {
         return success;
     }

@@ -13,7 +13,7 @@ public class TimeUtil {
      * 检测时间是否合法（开始时间在结束时间之前同时时间差是整时的）
      */
     public static boolean checkTime(long startTime, long endTime) {
-        return startTime < endTime && (endTime - startTime) % (1000 * 60 * 60) == 0;
+        return startTime < endTime && (endTime - startTime) % TimeUtil.ONE_HOUR == 0;
     }
 
 }

@@ -1,19 +1,21 @@
 package cn.edu.nwsuaf.cie.ssms.service.impl;
 
 import cn.edu.nwsuaf.cie.ssms.config.Price;
+import cn.edu.nwsuaf.cie.ssms.mapper.CloseInfoMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.GroundMapper;
+import cn.edu.nwsuaf.cie.ssms.mapper.LongOrderMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.OrderMapper;
 import cn.edu.nwsuaf.cie.ssms.model.Order;
-import cn.edu.nwsuaf.cie.ssms.util.Result;
+import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
+import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -29,11 +31,18 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private GroundMapper groundMapper;
     @Autowired
+    private CloseInfoMapper closeInfoMapper;
+    @Autowired
+    private LongOrderMapper longOrderMapper;
+    @Autowired
     private UserHolder userHolder;
 
     @Override
-    public Result order(String uid, int gid, long startTime, long endTime) {
-        if (groundMapper.selectByPrimaryKey(gid) == null || StringUtils.isEmpty(uid) || !TimeUtil.checkTime(startTime, endTime)) {
+    public Result order(int gid, long startTime, long endTime) {
+        if (userHolder.getUser() == null) {
+            return Result.error(MsgCenter.ERROR_AUTH);
+        }
+        if (groundMapper.selectByPrimaryKey(gid) == null || !TimeUtil.checkTime(startTime, endTime)) {
             return Result.error(MsgCenter.ERROR_PARAMS);
         }
         try {
@@ -43,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
             }
             Order order = new Order();
             order.setGid(gid);
-            order.setUid(uid);
+            order.setUid(userHolder.getUser().getUid());
             order.setStartTime(new Date(startTime));
             order.setEndTime(new Date(endTime));
             if (userHolder.getUser().isStudent()) {
@@ -54,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
             if (orderMapper.insert(order) == 1) {
                 return Result.success(order.getId());
             } else {
-                return Result.error(MsgCenter.SERVER_INNER_ERROR);
+                return Result.innerError();
             }
         } finally {
             lock.unlock();
@@ -62,10 +71,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Result cancel(String uid, int orderId) {
+    public Result cancel(int orderId) {
+        User user = userHolder.getUser();
         Order order = orderMapper.selectByPrimaryKey(orderId);
-        if (order == null || !order.getUid().equals(uid) || order.getStat().equals(Order.STAT_CANCEL)) {
+        if (order == null || order.getStat().equals(Order.STAT_CANCEL)) {
             return Result.error(MsgCenter.ERROR_PARAMS);
+        }
+        if (!user.getUid().equals(order.getUid())) {
+            return Result.error(MsgCenter.ERROR_AUTH);
         }
         if (order.getStartTime().getTime() - System.currentTimeMillis() < TimeUtil.ONE_DAY) {
             return Result.error(MsgCenter.ORDER_CANCEL_FAILED);
@@ -73,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderMapper.updateStatById(orderId, Order.STAT_CANCEL) == 1) {
             return Result.success();
         } else {
-            return Result.error(MsgCenter.SERVER_INNER_ERROR);
+            return Result.innerError();
         }
     }
 
