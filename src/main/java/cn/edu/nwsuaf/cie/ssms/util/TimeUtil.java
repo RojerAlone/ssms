@@ -19,10 +19,10 @@ public class TimeUtil {
         return startTime < endTime && (endTime - startTime) % TimeUtil.ONE_HOUR == 0;
     }
 
-    private static SimpleDateFormat SDF_WITHOUT_TIME = new SimpleDateFormat("yy-MM-dd");
+    public static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static Date DateWithoutTime(long time) {
-        return null;
-    }
+    public static SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("HH:mm:ss");
+
+    public static SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 }

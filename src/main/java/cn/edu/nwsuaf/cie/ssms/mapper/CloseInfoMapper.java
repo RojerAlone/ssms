@@ -2,9 +2,11 @@ package cn.edu.nwsuaf.cie.ssms.mapper;
 
 import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
 import cn.edu.nwsuaf.cie.ssms.model.Order;
+import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -34,14 +36,15 @@ public interface CloseInfoMapper {
     List<Order> selectByStatAndTime(@Param(value = "stat") int stat, @Param(value = "startTime") Date startTime);
 
     class SQLBuilder {
+
         public String buildInsert(final CloseInfo closeInfo) {
             return new SQL(){{
                 INSERT_INTO("closeinfo");
                 VALUES("gid", String.valueOf(closeInfo.getGid()));
-                VALUES("close_date", closeInfo.getCloseDate().toString());
-                VALUES("start_time", closeInfo.getStartTime().toString());
+                VALUES("close_date", "'" + TimeUtil.DATE_FORMATTER.format(closeInfo.getCloseDate()) + "'");
+                VALUES("start_time", "'" + TimeUtil.TIME_FORMATTER.format(closeInfo.getStartTime()) + "'");
                 if (closeInfo.getEndTime() != null) {
-                    VALUES("end_time", closeInfo.getEndTime().toString());
+                    VALUES("end_time", "'" + TimeUtil.TIME_FORMATTER.format(closeInfo.getEndTime()) + "'");
                 }
                 if (closeInfo.getReason() != null) {
                     VALUES("reason", closeInfo.getReason());
