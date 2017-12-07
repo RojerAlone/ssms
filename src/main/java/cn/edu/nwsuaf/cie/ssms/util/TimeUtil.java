@@ -1,5 +1,8 @@
 package cn.edu.nwsuaf.cie.ssms.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by zhangrenjie on 2017-12-04
  */
@@ -14,6 +17,12 @@ public class TimeUtil {
      */
     public static boolean checkTime(long startTime, long endTime) {
         return startTime < endTime && (endTime - startTime) % TimeUtil.ONE_HOUR == 0;
+    }
+
+    private static SimpleDateFormat SDF_WITHOUT_TIME = new SimpleDateFormat("yy-MM-dd");
+
+    public static Date DateWithoutTime(long time) {
+        return null;
     }
 
 }

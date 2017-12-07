@@ -20,6 +20,10 @@ public interface CloseInfoMapper {
     @Update("update closeinfo set stat = #{stat} where id = #{id}")
     int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);
 
+    @Select("select * from closeinfo where gid = #{gid} and stat = #{stat} and close_date = #{closeDate}")
+    List<CloseInfo> selectByGidAndStatAndCloseDate(@Param("gid") int gid, @Param("stat") int stat,
+                                                   @Param("closeDate") Date closeDate);
+
     /**
      * 根据闭馆信息的状态和时间查询
      * @param stat 闭馆信息的状态

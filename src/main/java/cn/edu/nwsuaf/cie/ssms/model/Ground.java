@@ -7,6 +7,8 @@ public class Ground {
 
     private Integer type;
 
+    private boolean used;
+
     public Integer getId() {
         return id;
     }
@@ -29,5 +31,13 @@ public class Ground {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed() {
+        this.used = true;
     }
 }

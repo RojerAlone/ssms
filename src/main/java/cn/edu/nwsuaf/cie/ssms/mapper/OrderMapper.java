@@ -17,9 +17,12 @@ public interface OrderMapper {
     @Select("select * from `order` where id = #{id}")
     Order selectByPrimaryKey(Integer id);
 
+//    @Select("select count(`id`) from `order` where `gid` = #{gid} and `stat` != #{stat} " +
+//            "and (`start_time` <= #{startTime} and `end_time` >= #{startTime}) " +
+//            "or (`start_time` <= #{endTime} and `end_time` >= #{endTime})")
     @Select("select count(`id`) from `order` where `gid` = #{gid} and `stat` != #{stat} " +
-            "and (`start_time` <= #{startTime} and `end_time` >= #{startTime}) " +
-            "or (`start_time` <= #{endTime} and `end_time` >= #{endTime})")
+            "and `start_time` not between #{startTime} and #{endTime} " +
+            "and `end_time` not between #{startTime} and #{endTime}")
     int selectNumsBetweenTimeByGroundAndExcludeStat(@Param(value = "gid") Integer ground,
                                                     @Param(value = "startTime") Date startTime,
                                                     @Param(value = "endTime") Date endTime,

@@ -35,6 +35,10 @@ public class Result {
         return new Result(false, MsgCenter.SERVER_INNER_ERROR);
     }
 
+    public static Result errorParam() {
+        return Result.error(MsgCenter.ERROR_PARAMS);
+    }
+
     public boolean isSuccess() {
         return success;
     }

@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
             return Result.error(MsgCenter.ERROR_AUTH);
         }
         if (groundMapper.selectByPrimaryKey(gid) == null || !TimeUtil.checkTime(startTime, endTime)) {
-            return Result.error(MsgCenter.ERROR_PARAMS);
+            return Result.errorParam();
         }
         try {
             lock.lock();
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
         User user = userHolder.getUser();
         Order order = orderMapper.selectByPrimaryKey(orderId);
         if (order == null || order.getStat().equals(Order.STAT_CANCEL)) {
-            return Result.error(MsgCenter.ERROR_PARAMS);
+            return Result.errorParam();
         }
         if (!user.getUid().equals(order.getUid())) {
             return Result.error(MsgCenter.ERROR_AUTH);

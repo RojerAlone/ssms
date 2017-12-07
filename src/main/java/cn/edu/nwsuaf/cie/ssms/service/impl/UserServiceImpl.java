@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     public Result login(String uid, String authToken) {
         // TODO 判断合法的 authToken
         if (uid.length() != User.UID_LENGTH) {
-            return Result.error(MsgCenter.ERROR_PARAMS);
+            return Result.errorParam();
         }
         return Result.success(UUID.randomUUID().toString().replaceAll("-", ""));
     }

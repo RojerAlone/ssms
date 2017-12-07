@@ -7,6 +7,6 @@ import cn.edu.nwsuaf.cie.ssms.util.Result;
  */
 public interface GroundService {
 
-    Result getEmptyGround(int type);
+    Result getEmptyGround(int type, long startTime, long endTime);
 
 }
