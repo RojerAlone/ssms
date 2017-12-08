@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS `ssms`.`ground` (
 CREATE TABLE IF NOT EXISTS `ssms`.`closeinfo` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `gid` INT COMMENT '场馆ID',
-  `close_date` DATE NOT NULL COMMENT '闭馆日期',
+  `start_date` DATE NOT NULL COMMENT '闭馆日期',
+  `end_date` DATE NOT NULL COMMENT '开放日期',
   `start_time` TIME DEFAULT NULL COMMENT '闭馆开始时间，如果为空表示整天都不开放',
   `end_time` TIME DEFAULT NULL COMMENT '开放时间，如果为空表示整天都不开放',
   `reason` VARCHAR(100) DEFAULT NULL COMMENT '不开放原因',
@@ -38,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `ssms`.`longorder` (
   `gid` INT NOT NULL COMMENT '场地ID',
   `start_date` DATE NOT NULL COMMENT '开始日期',
   `end_date` DATE NOT NULL COMMENT '结束日期',
-  `start_time` TIME NOT NULL COMMENT '开始时间',
+  `start_time` TIME DEFAULT NULL COMMENT '开始时间，如果为空表示占用该场地一整天',
   `end_time` TIME DEFAULT NULL COMMENT '结束时间，如果为空表示占用该场地一整天',
   `weekday` INT NOT NULL COMMENT '每周几',
   `stat` INT NOT NULL DEFAULT 0 COMMENT '0 表示正常，1 表示已删除',

@@ -12,7 +12,9 @@ public class CloseInfo {
 
     private Integer gid;
 
-    private Date closeDate;
+    private Date startDate;
+
+    private Date endDate;
 
     private Date startTime;
 
@@ -38,12 +40,20 @@ public class CloseInfo {
         this.gid = gid;
     }
 
-    public Date getCloseDate() {
-        return closeDate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setCloseDate(Date closeDate) {
-        this.closeDate = closeDate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public Date getStartTime() {
@@ -76,5 +86,19 @@ public class CloseInfo {
 
     public void setStat(Integer stat) {
         this.stat = stat;
+    }
+
+    @Override
+    public String toString() {
+        return "CloseInfo{" +
+                "id=" + id +
+                ", gid=" + gid +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", reason='" + reason + '\'' +
+                ", stat=" + stat +
+                '}';
     }
 }

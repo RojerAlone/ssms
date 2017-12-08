@@ -30,8 +30,6 @@ public class OrderMapperTest {
     @Autowired
     private OrderMapper orderMapper;
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd hh:mm");
-
     @Before
     public void before() {
         System.out.println("\n");
@@ -41,7 +39,7 @@ public class OrderMapperTest {
     public void insert() throws Exception {
         int gid = 1;
         String uid = "2014012597";
-        Date startTime = sdf.parse("2017-12-07 20:40");
+        Date startTime = TimeUtil.parseDateTime("2017-12-07 20:40");
         Date endTime = new Date(startTime.getTime() + TimeUtil.ONE_HOUR);
         int total = 10;
         Order order = new Order();
@@ -58,10 +56,16 @@ public class OrderMapperTest {
     @Test
     public void selectNumsBetweenTimeByGroundAndExcludeStat() throws Exception {
         int gid = 1;
-        Date startTime = sdf.parse("2017-12-07 20:00");
+        Date startTime = TimeUtil.parseDateTime("2017-12-07 20:00");
         Date endTime = new Date(startTime.getTime() + TimeUtil.ONE_HOUR);
         int nums = orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(gid, startTime, endTime, Order.STAT_CANCEL);
         LOGGER.info("nums : {}", nums);
+    }
+
+    @Test
+    public void selectByPrimaryKey() throws Exception {
+        Order order = orderMapper.selectByPrimaryKey(1);
+        LOGGER.info("order : {}", order);
     }
 
 }

@@ -7,6 +7,8 @@ import cn.edu.nwsuaf.cie.ssms.util.Result;
  */
 public interface OrderService {
 
+    Result getById(int id);
+
     /**
      * 预订场地
      */

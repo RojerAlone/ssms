@@ -25,7 +25,7 @@ public class CloseInfoController extends AbstractController {
                          @RequestParam(value = "reason", required = false) String reason) {
         CloseInfo closeInfo = new CloseInfo();
         closeInfo.setGid(gid);
-        closeInfo.setCloseDate(closeDate);
+        closeInfo.setStartDate(closeDate);
         closeInfo.setStartTime(startTime);
         closeInfo.setEndTime(endTime);
         closeInfo.setReason(reason);

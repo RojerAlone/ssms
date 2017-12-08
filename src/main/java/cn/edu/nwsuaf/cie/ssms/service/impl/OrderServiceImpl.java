@@ -38,6 +38,12 @@ public class OrderServiceImpl implements OrderService {
     private UserHolder userHolder;
 
     @Override
+    public Result getById(int id) {
+        // TODO 验证
+        return Result.success(orderMapper.selectByPrimaryKey(id));
+    }
+
+    @Override
     public Result order(int gid, long startTime, long endTime) {
         if (userHolder.getUser() == null) {
             return Result.error(MsgCenter.ERROR_AUTH);

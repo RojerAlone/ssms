@@ -13,3 +13,5 @@ spring:
 mybatis:
   configuration:
     cache-enabled: true
+    map-underscore-to-camel-case: true
+  type-aliases-package: cn.edu.nwsuaf.cie.ssms.model

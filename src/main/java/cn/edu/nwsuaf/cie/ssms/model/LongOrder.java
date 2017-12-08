@@ -87,4 +87,18 @@ public class LongOrder {
     public void setStat(Integer stat) {
         this.stat = stat;
     }
+
+    @Override
+    public String toString() {
+        return "LongOrder{" +
+                "id=" + id +
+                ", gid=" + gid +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", weekday=" + weekday +
+                ", stat=" + stat +
+                '}';
+    }
 }

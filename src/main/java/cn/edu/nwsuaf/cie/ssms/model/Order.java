@@ -106,4 +106,19 @@ public class Order {
     public void setCtime(Date ctime) {
         this.ctime = ctime;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", gid=" + gid +
+                ", uid='" + uid + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", total=" + total +
+                ", payType=" + payType +
+                ", stat=" + stat +
+                ", ctime=" + ctime +
+                '}';
+    }
 }

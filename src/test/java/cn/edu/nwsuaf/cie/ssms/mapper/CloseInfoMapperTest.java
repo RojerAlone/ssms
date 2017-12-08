@@ -1,6 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.mapper;
 
 import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
+import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -27,8 +30,6 @@ public class CloseInfoMapperTest {
     @Autowired
     private CloseInfoMapper closeInfoMapper;
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-
     @Before
     public void before() {
         System.out.println("\n");
@@ -36,12 +37,13 @@ public class CloseInfoMapperTest {
 
     @Test
     public void insert() throws Exception {
-        Date startTime = sdf.parse("2017-12-07 20:40:30");
+        String startStr = "2017-12-07 20:40:30";
+        Date startTime = TimeUtil.parseDateTime(startStr);
         CloseInfo closeInfo = new CloseInfo();
         closeInfo.setGid(1);
+        closeInfo.setStartDate(startTime);
+        closeInfo.setEndDate(startTime);
         closeInfo.setStartTime(startTime);
-        closeInfo.setCloseDate(startTime);
-//        closeInfo.setCloseDate(sdf.parse("2017-12-07"));
         int res = closeInfoMapper.insert(closeInfo);
         LOGGER.info("result : {}", res);
         assertTrue(res == 1);
@@ -49,6 +51,11 @@ public class CloseInfoMapperTest {
 
     @Test
     public void selectByGidAndStatAndCloseDate() throws Exception {
+        String startStr = "2017-12-07 20:40:30";
+        Date startTime = TimeUtil.parseDate(startStr);
+        List<CloseInfo> list = closeInfoMapper.selectByGidAndStatAndCloseDate(1, CloseInfo.STAT_OK, startTime);
+        LOGGER.info("result : {}", list);
+        assertTrue(!list.isEmpty());
     }
 
 }

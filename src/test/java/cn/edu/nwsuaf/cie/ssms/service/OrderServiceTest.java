@@ -56,8 +56,8 @@ public class OrderServiceTest {
     @Test
     public void cancel() throws Exception {
         int order = 1;
-        Result result = orderService.cancel(order);
-        LOGGER.info("order : {}", result);
+//        Result result = orderService.cancel(order);
+//        LOGGER.info("order : {}", result);
     }
 
 }

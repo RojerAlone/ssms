@@ -66,10 +66,11 @@ public class GroundServiceImpl implements GroundService {
                     }
                 }
                 // 查看是否被长期订单预订
-                List<LongOrder> longOrders = longOrderMapper.selectByStatAndDate(LongOrder.STAT_OK, startDateTime);
+                List<LongOrder> longOrders = longOrderMapper.selectByGidAndStatAndDate(ground.getId(), LongOrder.STAT_OK, startDateTime);
                 for (LongOrder longOrder : longOrders) {
                     // TODO 时间判断
-                    if (longOrder.getStartTime() == null) {
+
+                    if (longOrder.getEndTime() == null) {
                         ground.setUsed();
                         break;
                     }

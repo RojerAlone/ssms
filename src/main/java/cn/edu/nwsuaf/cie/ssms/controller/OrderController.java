@@ -25,9 +25,22 @@ public class OrderController extends AbstractController {
         return orderService.order(gid, startTime, endTime);
     }
 
-    @PostMapping("cancel")
+    @PostMapping("/cancel")
     public Result cancel(@RequestParam int orderId) {
         return orderService.cancel(orderId);
+    }
+
+    @GetMapping("/get/{id}")
+    public Result getById(@PathVariable("id") int id) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!\n");
+        return orderService.getById(id);
+    }
+
+    @GetMapping("/{id}")
+    public Result getBydId(@PathVariable("id") int id) {
+//        return Result.success();
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!\n");
+        return orderService.getById(id);
     }
 
 }
