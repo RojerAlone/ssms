@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by zhangrenjie on 2017-11-28
  */
 @RestController
-@RequestMapping(value = "order")
+@RequestMapping(value = "/order")
 public class OrderController extends AbstractController {
 
     @Autowired
@@ -30,16 +30,8 @@ public class OrderController extends AbstractController {
         return orderService.cancel(orderId);
     }
 
-    @GetMapping("/get/{id}")
-    public Result getById(@PathVariable("id") int id) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!\n");
-        return orderService.getById(id);
-    }
-
     @GetMapping("/{id}")
     public Result getBydId(@PathVariable("id") int id) {
-//        return Result.success();
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!\n");
         return orderService.getById(id);
     }
 

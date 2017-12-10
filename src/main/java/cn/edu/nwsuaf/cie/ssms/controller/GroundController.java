@@ -5,6 +5,7 @@ import cn.edu.nwsuaf.cie.ssms.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -18,7 +19,7 @@ public class GroundController extends AbstractController {
     private GroundService groundService;
 
     @GetMapping("/all")
-    public Result getAll(int type, long startTime, long endTime) {
+    public Result getAll(@RequestParam int type, @RequestParam long startTime, @RequestParam long endTime) {
         return groundService.getEmptyGround(type, startTime, endTime);
     }
 

@@ -69,10 +69,25 @@ public class GroundServiceImpl implements GroundService {
                 List<LongOrder> longOrders = longOrderMapper.selectByGidAndStatAndDate(ground.getId(), LongOrder.STAT_OK, startDateTime);
                 for (LongOrder longOrder : longOrders) {
                     // TODO 时间判断
-
-                    if (longOrder.getEndTime() == null) {
+                    if (longOrder.getWeekday() != TimeUtil.getWeekday(startDateTime)) {
+                        continue;
+                    }
+                    if (longOrder.getStartTime() == null) { // 整天都不开放
                         ground.setUsed();
                         break;
+                    } else {
+                        if (longOrder.getEndTime() == null) { // 如果长期订单开始时间从开始到当天结束
+                            if (TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) == 1) { // 如果查询的结束时间大于长订单开始时间
+                                ground.setUsed();
+                                break;
+                            }
+                        } else { // 如果开始时间和结束时间都不为空
+                            if (!(TimeUtil.compareTime(startDateTime, longOrder.getEndTime()) != -1
+                                    || TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) != 1)) {
+                                ground.setUsed();
+                                break;
+                            }
+                        }
                     }
                 }
             }

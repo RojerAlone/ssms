@@ -7,6 +7,11 @@ spring:
     url: jdbc:mysql://localhost:3306/ssms?useSSL=false
     username: root
     password: 123456
-    schema: classpath:db-schema.sql
-    data: classpath:db-data.sql
-    continue-on-error: true # 数据库脚本执行失败的时候忽略错误继续启动程序
+#    schema: classpath:db-schema.sql
+#    data: classpath:db-data.sql
+#    continue-on-error: true # 数据库脚本执行失败的时候忽略错误继续启动程序
+mybatis:
+  configuration:
+    cache-enabled: true
+    map-underscore-to-camel-case: true
+  type-aliases-package: cn.edu.nwsuaf.cie.ssms.model

@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS `ssms` DEFAULT CHARACTER SET UTF8;
 CREATE TABLE IF NOT EXISTS `ssms`.`ground` (
   `id` INT NOT NULL COMMENT '场地ID',
   `name` VARCHAR(20) NOT NULL COMMENT '场地名称',
-  `gid` INT NOT NULL COMMENT '场地类型，1 表示羽毛球馆，2 表示健美操室，3 表示健身房，4 表示乒乓球馆',
+  `type` INT NOT NULL COMMENT '场地类型，1 表示羽毛球馆，2 表示健美操室，3 表示健身房，4 表示乒乓球馆',
   PRIMARY KEY (`id`)
 ) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '场地信息';
 

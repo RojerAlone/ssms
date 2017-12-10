@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class LongOrderMapperTest {
         longOrder.setStartDate(startTime);
         longOrder.setEndDate(endTime);
         longOrder.setStartTime(startTime);
-//        longOrder.setEndTime(TimeUtil.parseDate("2017-12-07 23:40:30"));
+        longOrder.setEndTime(endTime);
         longOrder.setWeekday(4);
         int result = longOrderMapper.insert(longOrder);
         LOGGER.info("result : {}", result);
@@ -52,8 +53,10 @@ public class LongOrderMapperTest {
 
     @Test
     public void selectByGidAndStatAndDate() throws Exception {
+        String timeStr = "2017-12-07 21:40:30";
+        System.out.println(DateFormat.getTimeInstance().parse(timeStr));
         List<LongOrder> longOrders = longOrderMapper.selectByGidAndStatAndDate(1, LongOrder.STAT_OK,
-                TimeUtil.parseDateTime("2017-12-07 21:40:30"));
+                TimeUtil.parseDateTime(timeStr));
         LOGGER.info("results : {}", longOrders);
         assertTrue(!longOrders.isEmpty());
     }
