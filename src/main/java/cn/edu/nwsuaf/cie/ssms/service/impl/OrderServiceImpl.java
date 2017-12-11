@@ -1,14 +1,9 @@
 package cn.edu.nwsuaf.cie.ssms.service.impl;
 
 import cn.edu.nwsuaf.cie.ssms.config.Price;
-import cn.edu.nwsuaf.cie.ssms.mapper.CloseInfoMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.GroundMapper;
-import cn.edu.nwsuaf.cie.ssms.mapper.LongOrderMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.OrderMapper;
-import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
-import cn.edu.nwsuaf.cie.ssms.model.LongOrder;
 import cn.edu.nwsuaf.cie.ssms.model.Order;
-import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
@@ -21,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
