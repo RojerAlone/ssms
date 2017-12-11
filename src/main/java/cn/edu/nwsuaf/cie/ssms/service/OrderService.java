@@ -9,6 +9,14 @@ public interface OrderService {
 
     Result getById(int id);
 
+    Result getMyOrders(int nums);
+
+    Result getNotPaiedOrders(int nums);
+
+    Result getPaiedOrders(int nums);
+
+    Result getCanceledOrders(int nums);
+
     /**
      * 预订场地
      */

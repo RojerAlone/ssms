@@ -16,6 +16,6 @@ public class MsgCenter {
 
     public static final String ORDER_CANCEL_FAILED = "订单生效前 1 天内禁止取消订单";
 
-    public static final String ERROR_AUTH = "你没有权限进行操作，请重试";
+    public static final String ERROR_AUTH = "你没有权限进行操作，请登录";
 
 }

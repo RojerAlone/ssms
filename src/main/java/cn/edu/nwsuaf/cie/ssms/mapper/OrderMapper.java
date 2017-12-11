@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.Date;
+import java.util.List;
 
 @Mapper
 public interface OrderMapper {
@@ -23,13 +24,19 @@ public interface OrderMapper {
     @Select("select count(`id`) from `order` where `gid` = #{gid} and `stat` != #{stat} " +
             "and (`start_time` between #{startTime} and #{endTime} " +
             "or `end_time` between #{startTime} and #{endTime})")
-    int selectNumsBetweenTimeByGroundAndExcludeStat(@Param(value = "gid") Integer ground,
-                                                    @Param(value = "startTime") Date startTime,
-                                                    @Param(value = "endTime") Date endTime,
-                                                    @Param(value = "stat") Integer stat);
+    int selectNumsBetweenTimeByGroundAndExcludeStat(@Param("gid") Integer ground,
+                                                    @Param("startTime") Date startTime,
+                                                    @Param("endTime") Date endTime,
+                                                    @Param("stat") Integer stat);
+
+    @Select("select * from `order` where uid = #{uid} limit #{nums}")
+    List<Order> selectByUid(@Param("uid") String uid, @Param("nums") int nums);
+
+    @Select("select * from `order` where uid = #{uid} and stat = #{stat} limit #{nums}")
+    List<Order> selectByUidAndStat(@Param("uid") String uid, @Param("stat") int stat, @Param("nums") int nums);
 
     @Update("update `order` set stat=#{stat} where id = #{id}")
-    int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);
+    int updateStatById(@Param("id") int id, @Param("stat") int stat);
 
     @UpdateProvider(type = SQLBuilder.class, method = "buildUpdate")
     int updateByPrimaryKeySelective(Order order);
