@@ -5,7 +5,10 @@ import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
 import cn.edu.nwsuaf.cie.ssms.service.CloseInfoService;
 import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
+import cn.edu.nwsuaf.cie.ssms.util.UserCheck;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CloseInfoServiceImpl implements CloseInfoService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CloseInfoServiceImpl.class);
 
     @Autowired
     private CloseInfoMapper closeInfoMapper;

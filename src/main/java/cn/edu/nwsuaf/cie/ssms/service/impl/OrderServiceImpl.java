@@ -122,6 +122,7 @@ public class OrderServiceImpl implements OrderService {
             return Result.errorParam();
         }
         if (!userHolder.getUser().getUid().equals(order.getUid())) {
+            LOGGER.warn("cancel - uid not match order : uid {}, order {}", userHolder.getUser().getUid(), order);
             return Result.error(MsgCenter.ERROR_AUTH);
         }
         if (order.getStartTime().getTime() - System.currentTimeMillis() < TimeUtil.ONE_DAY) {

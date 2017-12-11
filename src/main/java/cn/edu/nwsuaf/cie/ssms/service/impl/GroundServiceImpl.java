@@ -6,6 +6,8 @@ import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.service.GroundService;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import java.util.List;
  */
 @Service
 public class GroundServiceImpl implements GroundService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GroundServiceImpl.class);
 
     @Autowired
     private GroundMapper groundMapper;
@@ -31,6 +35,7 @@ public class GroundServiceImpl implements GroundService {
     public Result getEmptyGround(int type, long startTime, long endTime) {
         List<Ground> grounds;
         if (!TimeUtil.checkTime(startTime, endTime) || (grounds = groundMapper.selectByType(type)).isEmpty()) {
+            LOGGER.warn("getEmptyGround - error param : type {}, startTime {}, endTime {}", type, startTime, endTime);
             return Result.errorParam();
         }
         Date startDateTime = new Date(startTime);

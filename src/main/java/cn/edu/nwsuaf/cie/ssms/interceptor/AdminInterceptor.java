@@ -1,6 +1,9 @@
 package cn.edu.nwsuaf.cie.ssms.interceptor;
 
+import cn.edu.nwsuaf.cie.ssms.util.UserCheck;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -10,21 +13,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by zhangrenjie on 2017-12-03
- * 权限拦截，拦截只有登录了的用户才能进行的操作
+ * @author RojerAlone
+ * @Date 2017-12-11 23:16
  */
 @Component
-public class LoginNeedInterceptor implements HandlerInterceptor {
+public class AdminInterceptor implements HandlerInterceptor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminInterceptor.class);
 
     @Autowired
     private UserHolder userHolder;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        return userHolder.getUser() != null;
-        // 如果没有登录，跳转到特定的url
-        if (userHolder.getUser() == null) {
-            response.sendRedirect("/notLogin");
+        if (!UserCheck.isAdmin(userHolder.getUser().getUid())) {
+            LOGGER.warn("permission denied, uid {}", userHolder.getUser().getUid());
+            response.sendRedirect("/notAdmin");
         }
         return true;
     }

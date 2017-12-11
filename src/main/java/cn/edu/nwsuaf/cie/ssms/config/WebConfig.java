@@ -1,5 +1,6 @@
 package cn.edu.nwsuaf.cie.ssms.config;
 
+import cn.edu.nwsuaf.cie.ssms.interceptor.AdminInterceptor;
 import cn.edu.nwsuaf.cie.ssms.interceptor.AuthInterceptor;
 import cn.edu.nwsuaf.cie.ssms.interceptor.LoginNeedInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private AuthInterceptor authInterceptor;
     @Autowired
     private LoginNeedInterceptor loginNeedInterceptor;
+    @Autowired
+    private AdminInterceptor adminInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor).addPathPatterns("/**");
 //        registry.addInterceptor(loginNeedInterceptor).addPathPatterns("/order/**");
+//        registry.addInterceptor(adminInterceptor).addPathPatterns("/closeinfo/**");
         super.addInterceptors(registry);
     }
 }
