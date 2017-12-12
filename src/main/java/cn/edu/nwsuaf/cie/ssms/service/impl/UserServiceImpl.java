@@ -25,7 +25,11 @@ public class UserServiceImpl implements UserService {
         if (uid.length() != User.UID_LENGTH) {
             return Result.errorParam();
         }
-        return Result.success(UUID.randomUUID().toString().replaceAll("-", ""));
+        String token = UUID.randomUUID().toString().replaceAll("-", "");
+        User user = new User();
+        user.setUid(uid);
+        cache.put(token, user);
+        return Result.success(token);
     }
 
     @Override

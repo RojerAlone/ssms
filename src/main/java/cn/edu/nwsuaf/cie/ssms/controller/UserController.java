@@ -2,6 +2,7 @@ package cn.edu.nwsuaf.cie.ssms.controller;
 
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.service.UserService;
+import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +34,7 @@ public class UserController extends AbstractController {
         if (result.isSuccess()) {
             Cookie cookie = new Cookie("token", (String) result.getResult());
             cookie.setPath("/");
-            cookie.setMaxAge(60 * 60 * 24 * 7); // 设置 cookie 有效期
+            cookie.setMaxAge((int) (TimeUtil.ONE_DAY * 7 / 1000)); // 设置 cookie 有效期
             response.addCookie(cookie);
             return Result.success();
         } else {
