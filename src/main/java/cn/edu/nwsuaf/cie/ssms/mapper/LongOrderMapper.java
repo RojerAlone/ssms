@@ -14,8 +14,11 @@ public interface LongOrderMapper {
     @InsertProvider(type = SQLBuilder.class, method = "insert")
     int insert(LongOrder order);
 
-    @Select("select * from longorder where stat = #{stat}")
-    List<LongOrder> selectByStat(int stat);
+    @Select("select * from longorder where id = #{id}")
+    LongOrder selectById(int id);
+
+    @Select("select * from longorder where stat = #{stat} limit #{nums}")
+    List<LongOrder> selectByStatAndNums(@Param("stat") int stat, @Param("nums") int nums);
 
 //    @Select("select * from longorder where stat = #{stat} and #{date} between start_date and end_date")
 //    List<LongOrder> selectByGidAndStatAndDate(@Param("gid") int gid, @Param("stat") int stat, @Param("date") Date date);
