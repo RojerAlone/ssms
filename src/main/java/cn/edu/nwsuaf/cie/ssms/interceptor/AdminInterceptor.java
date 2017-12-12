@@ -29,6 +29,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         if (!UserCheck.isAdmin(userHolder.getUser().getUid())) {
             LOGGER.warn("permission denied, uid {}", userHolder.getUser().getUid());
             response.sendRedirect("/notAdmin");
+            return false;
         }
         return true;
     }

@@ -25,6 +25,7 @@ public class LoginNeedInterceptor implements HandlerInterceptor {
         // 如果没有登录，跳转到特定的url
         if (userHolder.getUser() == null) {
             response.sendRedirect("/notLogin");
+            return false;
         }
         return true;
     }
