@@ -24,6 +24,21 @@ public class LongOrder {
 
     private Integer stat;
 
+    public LongOrder() {}
+
+    public LongOrder(Integer gid, long startDate, long endDate, Long startTime, Long endTime, int weekday) {
+        this.gid = gid;
+        this.startDate = new Date(startDate);
+        this.endDate = new Date(endDate);
+        if (startTime != null) {
+            this.startTime = new Date(startTime);
+        }
+        if (endTime != null) {
+            this.endTime = new Date(endTime);
+        }
+        this.weekday = weekday;
+    }
+
     public Integer getId() {
         return id;
     }

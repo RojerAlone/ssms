@@ -22,9 +22,19 @@ public class LongOrderController {
     }
 
     @PutMapping("/add")
-    public Result add() {
-        LongOrder longOrder = new LongOrder();
+    public Result add(@RequestParam("gid") int gid,
+                      @RequestParam("startDate") long startDate,
+                      @RequestParam("endDate") long endDate,
+                      @RequestParam(value = "startTime", required = false) Long startTime,
+                      @RequestParam(value = "endTime", required = false) Long endTime,
+                      @RequestParam("weekday") int weekday) {
+        LongOrder longOrder = new LongOrder(gid, startDate, endDate, startTime, endTime, weekday);
         return longOrderService.insert(longOrder);
+    }
+
+    @DeleteMapping("{id}")
+    public Result delete(@PathVariable("id") int id) {
+        return longOrderService.delete(id);
     }
 
 }
