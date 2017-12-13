@@ -20,4 +20,6 @@ public class MsgCenter {
 
     public static final String ERROR_AUTH = "您没有对应的权限，请向管理员申请权限";
 
+    public static final String ERROR_LOGIN = "用户名或密码错误，请重试";
+
 }
