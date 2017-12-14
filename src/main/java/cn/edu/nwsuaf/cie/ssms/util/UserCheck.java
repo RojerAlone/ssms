@@ -10,6 +10,10 @@ import java.util.Set;
  */
 public class UserCheck {
 
+    public static boolean check(String uid) {
+        return uid.length() == 10;
+    }
+
     private static final Set<String> ADMINS = new HashSet<>();
 
     private static final Set<String> SPECIAL_USER = new HashSet<>();

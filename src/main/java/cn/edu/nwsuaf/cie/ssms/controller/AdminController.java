@@ -4,10 +4,7 @@ import cn.edu.nwsuaf.cie.ssms.service.AdminService;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +20,7 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @PutMapping("/login")
+    @PostMapping("/login")
     public Result login(@RequestParam("uid") String uid, @RequestParam("password") String password, HttpServletResponse response) {
         Result result = adminService.login(uid, password);
         if (result.isSuccess()) {
@@ -36,9 +33,24 @@ public class AdminController {
         return result;
     }
 
-    @PutMapping("/addSpecial")
-    public Result addSpecialUser(@RequestParam("uid") String uid) {
-        return null;
+    @PutMapping("/admin/{uid}")
+    public Result addAdmin(@PathVariable("uid") String uid) {
+        return adminService.addAdmin(uid);
+    }
+
+    @DeleteMapping("/admin/{uid}")
+    public Result removeAdmin(@PathVariable("uid") String uid) {
+        return adminService.addAdmin(uid);
+    }
+
+    @PutMapping("/special/{uid}")
+    public Result addSpecialUser(@PathVariable("uid") String uid) {
+        return adminService.addSpecialUser(uid);
+    }
+
+    @DeleteMapping("/special/{uid}")
+    public Result removeSpecialUser(@PathVariable("uid") String uid) {
+        return adminService.removeSpecialUser(uid);
     }
 
 }
