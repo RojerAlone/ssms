@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zhangrenjie on 2017-11-28
+ * 缓存工具类，也可以使用 Guava Cache
  */
 @Component
 public class CommonCache {

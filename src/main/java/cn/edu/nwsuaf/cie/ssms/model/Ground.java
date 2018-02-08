@@ -1,6 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.model;
 
 public class Ground {
+
     private Integer id;
 
     private String name;

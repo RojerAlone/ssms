@@ -15,11 +15,6 @@ public class OrderController extends AbstractController {
     @Autowired
     private OrderService orderService;
 
-//    @PutMapping("/order")
-//    public Result order(@RequestParam int gid, @RequestParam long startTime, @RequestParam long endTime) {
-//        return orderService.order(userHolder.getUser().getUid(), gid, startTime, endTime);
-//    }
-
     @PutMapping("/order")
     public Result order(@RequestParam int gid, @RequestParam long startTime, @RequestParam long endTime) {
         return orderService.order(gid, startTime, endTime);
