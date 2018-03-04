@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `ssms`.`closeinfo` (
   `start_time` TIME DEFAULT NULL COMMENT '闭馆开始时间，如果为空表示整天都不开放',
   `end_time` TIME DEFAULT NULL COMMENT '开放时间，如果为空表示整天都不开放',
   `reason` VARCHAR(100) DEFAULT NULL COMMENT '不开放原因',
-  `stat` INT NOT NULL DEFAULT 0 COMMENT '0 表示正常，表示已删除',
+  `stat` INT NOT NULL DEFAULT 0 COMMENT '0 表示正常，1 表示已删除',
   PRIMARY KEY (`id`)
 ) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '闭馆信息，也存储特殊占用的订单';
 
