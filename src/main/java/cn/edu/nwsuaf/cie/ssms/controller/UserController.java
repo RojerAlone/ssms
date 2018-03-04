@@ -1,7 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.controller;
 
+import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
-import cn.edu.nwsuaf.cie.ssms.service.UserService;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController extends AbstractController {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private UserHolder userHolder;
 
     @PostMapping("login")
@@ -30,7 +28,7 @@ public class UserController extends AbstractController {
         if (userHolder.getUser() != null && userHolder.getUser().getUid().equals(uid)) {
             return Result.success();
         }
-        Result result = userService.login(uid, authToken);
+        Result result = CommonService.login(uid, authToken);
         if (result.isSuccess()) {
             Cookie cookie = new Cookie("token", (String) result.getResult());
             cookie.setPath("/");
@@ -40,20 +38,6 @@ public class UserController extends AbstractController {
         } else {
             return result;
         }
-    }
-
-    @PostMapping("logout")
-    public Result logout() {
-        String token = null;
-        if (getRequest().getCookies() != null) {
-            for (Cookie cookie : getRequest().getCookies()) {
-                if (cookie.getName().equals("token")) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        return userService.logout(token);
     }
 
 }

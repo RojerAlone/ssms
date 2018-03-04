@@ -30,4 +30,22 @@ public class OrderController extends AbstractController {
         return orderService.getById(id);
     }
 
+    @GetMapping("/paying")
+    public Result getPayingOrders(@RequestParam(value = "page", defaultValue = "1") int page,
+                                  @RequestParam(value = "nums", defaultValue = "10") int nums) {
+        return null;
+    }
+
+    @GetMapping("/orders")
+    public Result getOrderedOrders(@RequestParam(value = "page", defaultValue = "1") int page,
+                                   @RequestParam(value = "nums", defaultValue = "10") int nums) {
+        return null;
+    }
+
+    @GetMapping("/canceled")
+    public Result getCanceledOrders(@RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "nums", defaultValue = "10") int nums) {
+        return null;
+    }
+
 }

@@ -6,6 +6,9 @@ import cn.edu.nwsuaf.cie.ssms.mapper.OrderMapper;
 import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
 import cn.edu.nwsuaf.cie.ssms.model.LongOrder;
 import cn.edu.nwsuaf.cie.ssms.model.Order;
+import cn.edu.nwsuaf.cie.ssms.model.User;
+import cn.edu.nwsuaf.cie.ssms.util.CommonCache;
+import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +26,8 @@ public class CommonService {
     private static CloseInfoMapper closeInfoMapper;
     @Autowired
     private static LongOrderMapper longOrderMapper;
+    @Autowired
+    private static CommonCache cache;
 
     /**
      * 检测某场地某个时间段内是否可用
@@ -67,5 +72,25 @@ public class CommonService {
             }
         }
         return false;
+    }
+
+    public static Result login(String uid, String token) {
+        User user = (User) cache.get(token);
+        if (user != null) {
+            return Result.innerError();
+        }
+        user = new User();
+        user.setUid(uid);
+        cache.put(token, user);
+        return Result.success(token);
+    }
+
+    public static Result logout(String uid, String token) {
+        User user = (User) cache.get(token);
+        if (user == null || !user.getUid().equalsIgnoreCase(uid)) {
+            return Result.errorParam();
+        }
+        cache.remove(token);
+        return Result.success();
     }
 }

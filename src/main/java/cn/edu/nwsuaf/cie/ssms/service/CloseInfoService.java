@@ -8,7 +8,7 @@ import cn.edu.nwsuaf.cie.ssms.util.Result;
  */
 public interface CloseInfoService {
 
-    Result insert(CloseInfo closeInfo);
+    Result close(CloseInfo closeInfo);
 
     Result delete(int id);
 

@@ -9,11 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 /**
- * @author RojerAlone
- * @Date 2017-12-13 23:33
+ * Created by zhangrenjie on 2018-03-04
  */
 @Service
-public class AdminService {
+public class RootService {
 
     public Result login(String uid, String password) {
         if (AdminAuthUtil.auth(uid, password)) {
@@ -33,19 +32,6 @@ public class AdminService {
 
     public Result removeAdmin(String uid) {
         UserCheck.removeAdmin(uid);
-        return Result.success();
-    }
-
-    public Result addWorker(String uid) {
-        if (!UserCheck.check(uid)) {
-            return Result.errorParam();
-        }
-        UserCheck.addSpecialUser(uid);
-        return Result.success();
-    }
-
-    public Result removeWorker(String uid) {
-        UserCheck.removeSpecialUser(uid);
         return Result.success();
     }
 

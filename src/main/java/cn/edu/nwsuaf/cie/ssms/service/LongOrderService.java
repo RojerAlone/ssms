@@ -8,7 +8,7 @@ import cn.edu.nwsuaf.cie.ssms.util.Result;
  */
 public interface LongOrderService {
 
-    Result insert(LongOrder longOrder);
+    Result order(LongOrder longOrder);
 
     Result delete(int id);
 

@@ -21,7 +21,7 @@ public class LongOrderServiceImpl implements LongOrderService {
     private LongOrderMapper longOrderMapper;
 
     @Override
-    public Result insert(LongOrder longOrder) {
+    public Result order(LongOrder longOrder) {
         if (longOrderMapper.insert(longOrder) == 1) {
             return Result.success();
         } else {

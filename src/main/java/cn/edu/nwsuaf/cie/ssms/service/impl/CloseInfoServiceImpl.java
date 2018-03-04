@@ -27,7 +27,7 @@ public class CloseInfoServiceImpl implements CloseInfoService {
     private UserHolder userHolder;
 
     @Override
-    public Result insert(CloseInfo closeInfo) {
+    public Result close(CloseInfo closeInfo) {
         if (closeInfoMapper.insert(closeInfo) == 1) {
             return Result.success();
         } else {

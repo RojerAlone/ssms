@@ -17,19 +17,20 @@ public class LongOrderController {
     private LongOrderService longOrderService;
 
     @GetMapping("/all")
-    public Result getAll(@RequestParam(value = "nums", defaultValue = "10") int nums) {
+    public Result getAll(@RequestParam(value = "page", defaultValue = "1") int page,
+                         @RequestParam(value = "nums", defaultValue = "10") int nums) {
         return longOrderService.getAll(nums);
     }
 
     @PutMapping("/add")
     public Result add(@RequestParam("gid") int gid,
                       @RequestParam("startDate") long startDate,
-                      @RequestParam("endDate") long endDate,
+                      @RequestParam(value = "endDate", required = false) long endDate,
                       @RequestParam(value = "startTime", required = false) Long startTime,
                       @RequestParam(value = "endTime", required = false) Long endTime,
                       @RequestParam("weekday") int weekday) {
         LongOrder longOrder = new LongOrder(gid, startDate, endDate, startTime, endTime, weekday);
-        return longOrderService.insert(longOrder);
+        return longOrderService.order(longOrder);
     }
 
     @DeleteMapping("{id}")
