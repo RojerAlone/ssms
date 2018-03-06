@@ -145,7 +145,15 @@
 
 管理员对场地信息进行管理，包括长期订单、闭馆信息、用户普通订单，还可以添加管理员（root 用户才可以）。
 
-#### /closeinfo/{gid} PUT
+#### /closeinfo/all GET
+获取所有的闭馆信息
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| page | int | false | 页码 |
+| nums | int | false | 每页显示的个数 |
+
+#### /closeinfo/add PUT
 添加闭馆信息
 
 | 参数 | 类型 | 必需 | 含义 |
@@ -157,7 +165,7 @@
 | endTime | long | false | 闭馆结束时间，如果为空表示闭馆结束当天都关闭 |
 | reason | string | false | 闭馆原因 |
 
-#### /closeinfo/{gid} DELETE
+#### /closeinfo/{id} DELETE
 删除闭馆信息
 
 #### /longorder/all GET

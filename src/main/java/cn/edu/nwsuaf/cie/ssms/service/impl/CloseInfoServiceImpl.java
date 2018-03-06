@@ -45,7 +45,7 @@ public class CloseInfoServiceImpl implements CloseInfoService {
     }
 
     @Override
-    public Result getAll() {
+    public Result getAll(int page, int nums) {
         return Result.success(closeInfoMapper.selectByStat(CloseInfo.STAT_OK));
     }
 }

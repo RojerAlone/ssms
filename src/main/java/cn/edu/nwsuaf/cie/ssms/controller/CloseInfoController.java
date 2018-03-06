@@ -18,7 +18,13 @@ public class CloseInfoController extends AbstractController {
     @Autowired
     private CloseInfoService closeInfoService;
 
-    @PutMapping("{ground}")
+    @GetMapping("/all")
+    public Result getAll(@RequestParam(value = "page", defaultValue = "1") int page,
+                         @RequestParam(value = "nums", defaultValue = "10") int nums) {
+        return closeInfoService.getAll(page, nums);
+    }
+
+    @PutMapping("add")
     public Result insert(@PathVariable("ground") int gid, @RequestParam("date") Date closeDate,
                          @RequestParam(value = "startTime", required = false) Date startTime,
                          @RequestParam(value = "endDate", required = false) Date endDate,
@@ -34,9 +40,9 @@ public class CloseInfoController extends AbstractController {
         return closeInfoService.close(closeInfo);
     }
 
-    @DeleteMapping("{ground}")
-    public Result delete(@PathVariable("ground") int gid) {
-        return closeInfoService.delete(gid);
+    @DeleteMapping("{id}")
+    public Result delete(@PathVariable("id") int id) {
+        return closeInfoService.delete(id);
     }
 
 }

@@ -12,6 +12,6 @@ public interface CloseInfoService {
 
     Result delete(int id);
 
-    Result getAll();
+    Result getAll(int page, int nums);
 
 }
