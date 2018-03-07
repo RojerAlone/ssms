@@ -7,7 +7,15 @@ public class User {
 
     private String uid;
 
+    /**
+     * 是否是学生
+     */
     private boolean student;
+
+    /**
+     * 用户的权限
+     */
+    private Access access;
 
     public String getUid() {
         return uid;
@@ -23,5 +31,13 @@ public class User {
 
     public void setStudent(boolean student) {
         this.student = student;
+    }
+
+    public Access getAccess() {
+        return access;
+    }
+
+    public void setAccess(Access access) {
+        this.access = access;
     }
 }

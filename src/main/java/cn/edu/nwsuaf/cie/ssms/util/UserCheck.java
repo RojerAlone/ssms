@@ -1,5 +1,8 @@
 package cn.edu.nwsuaf.cie.ssms.util;
 
+import cn.edu.nwsuaf.cie.ssms.model.Access;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,13 +13,16 @@ import java.util.Set;
  */
 public class UserCheck {
 
-    public static boolean check(String uid) {
-        return uid.length() == 10;
-    }
+    @Value("#{root.username}")
+    private static String ROOT;
 
     private static final Set<String> ADMINS = new HashSet<>();
 
     private static final Set<String> SPECIAL_USER = new HashSet<>();
+
+    public static boolean check(String uid) {
+        return uid.length() == 10;
+    }
 
     public static void addAdmin(String... uid) {
         ADMINS.addAll(Arrays.asList(uid));
@@ -40,5 +46,18 @@ public class UserCheck {
 
     public static boolean isSpecial(String uid) {
         return SPECIAL_USER.contains(uid);
+    }
+
+    public static Access getAccess(String uid) {
+        if (ROOT.equals(uid)) {
+            return Access.ROOT;
+        }
+        if (isAdmin(uid)) {
+            return Access.ADMIN;
+        }
+        if (isSpecial(uid)) {
+            return Access.WORKER;
+        }
+        return Access.NORMAL;
     }
 }

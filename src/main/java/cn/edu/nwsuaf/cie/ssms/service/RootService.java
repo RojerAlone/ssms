@@ -1,6 +1,6 @@
 package cn.edu.nwsuaf.cie.ssms.service;
 
-import cn.edu.nwsuaf.cie.ssms.util.AdminAuthUtil;
+import cn.edu.nwsuaf.cie.ssms.util.RootAuthUtil;
 import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.UserCheck;
@@ -14,10 +14,10 @@ import java.util.UUID;
 @Service
 public class RootService {
 
-    public Result login(String uid, String password) {
-        if (AdminAuthUtil.auth(uid, password)) {
+    public Result login(String username, String password) {
+        if (RootAuthUtil.auth(username, password)) {
             String token = UUID.randomUUID().toString().replace("-", "");
-            return CommonService.login(uid, token);
+            return CommonService.login(username, token);
         }
         return Result.error(MsgCenter.ERROR_LOGIN);
     }

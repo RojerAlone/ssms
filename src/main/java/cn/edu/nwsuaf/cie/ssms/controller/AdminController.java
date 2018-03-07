@@ -21,29 +21,6 @@ public class AdminController extends AbstractController {
     @Autowired
     private AdminService adminService;
 
-    @PostMapping("/login")
-    public Result login(@RequestParam("uid") String uid, @RequestParam("password") String password, HttpServletResponse response) {
-        Result result = adminService.login(uid, password);
-        if (result.isSuccess()) {
-            Cookie cookie = new Cookie("token", (String) result.getResult());
-            cookie.setPath("/");
-            cookie.setMaxAge((int) (TimeUtil.ONE_DAY * 7 / 1000));
-            response.addCookie(cookie);
-            return Result.success();
-        }
-        return result;
-    }
-
-    @PutMapping("/admin/{uid}")
-    public Result addAdmin(@PathVariable("uid") String uid) {
-        return adminService.addAdmin(uid);
-    }
-
-    @DeleteMapping("/admin/{uid}")
-    public Result removeAdmin(@PathVariable("uid") String uid) {
-        return adminService.addAdmin(uid);
-    }
-
     @PutMapping("/worker/{uid}")
     public Result addWorker(@PathVariable("uid") String uid) {
         return adminService.addWorker(uid);

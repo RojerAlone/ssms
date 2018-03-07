@@ -15,6 +15,6 @@ mybatis:
     cache-enabled: true
     map-underscore-to-camel-case: true
   type-aliases-package: cn.edu.nwsuaf.cie.ssms.model
-admin:
-  uid: admin
-  pswd: d14bd18d78cfe8fb709f4eafcbc4403a
+root:
+  username: admin
+  pswd: d14bd18d78cfe8fb709f4eafcbc4403a # RootAuthUtil 生成的加密数据
