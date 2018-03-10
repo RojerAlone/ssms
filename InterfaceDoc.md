@@ -141,9 +141,73 @@
 | page | int | false | 页码 |
 | nums | int | false | 每页显示的个数 |
 
+### root 使用
+
+#### /root/login POST
+root 用户登录
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| username | string | true | 用户名 |
+| password | string | true | 密码 |
+
+#### /root/admin/{uid} PUT
+添加管理员
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| uid | string | true | 学工号 |
+
+#### /root/admin/{uid} DELETE
+删除管理员
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| uid | string | true | 学工号 |
+
+#### /root/admin/all GET
+获取管理员列表
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| page | int | false | 页码 |
+| nums | int | false | 每页显示的个数 |
+
 ### 管理员使用
 
 管理员对场地信息进行管理，包括长期订单、闭馆信息、用户普通订单，还可以添加管理员（root 用户才可以）。
+
+#### /admin/login POST
+管理员登录
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| uid | string | true | 学工号 |
+| authToken | string | true | 网络中心提供的登录接口登录成功后返回的验证字段 |
+
+#### /admin/worker/{uid} PUT
+添加工作人员
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| uid | string | true | 学工号 |
+
+#### /admin/worker/{uid} DELETE
+删除工作人员
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| uid | string | true | 学工号 |
+
+#### /admin/worker/all GET
+获取工作人员列表
+
+| 参数 | 类型 | 必需 | 含义 |
+| :--- | :--- | :--- | :--- |
+| page | int | false | 页码 |
+| nums | int | false | 每页显示的个数 |
+
+### 管理员和工作人员都可以使用
 
 #### /closeinfo/all GET
 获取所有的闭馆信息
@@ -194,4 +258,3 @@
 | 参数 | 类型 | 必需 | 含义 |
 | :--- | :--- | :--- | :--- |
 | id | int | true | 订单ID |
-
