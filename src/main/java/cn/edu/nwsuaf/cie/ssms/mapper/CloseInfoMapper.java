@@ -15,8 +15,8 @@ public interface CloseInfoMapper {
     @InsertProvider(type = SQLBuilder.class, method = "insert")
     int insert(CloseInfo closeInfo);
 
-    @Select("select * from closeinfo where stat = #{stat}")
-    List<CloseInfo> selectByStat(int stat);
+    @Select("select * from closeinfo where stat = #{stat} limit #{page}, #{nums}")
+    List<CloseInfo> selectByStatAndNums(@Param("stat") int stat, @Param("page") int page, @Param("nums") int nums);
 
     @Update("update closeinfo set stat = #{stat} where id = #{id}")
     int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);

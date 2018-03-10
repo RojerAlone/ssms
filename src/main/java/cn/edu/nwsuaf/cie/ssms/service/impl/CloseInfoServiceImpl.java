@@ -4,8 +4,8 @@ import cn.edu.nwsuaf.cie.ssms.mapper.CloseInfoMapper;
 import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
 import cn.edu.nwsuaf.cie.ssms.service.CloseInfoService;
 import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
+import cn.edu.nwsuaf.cie.ssms.util.PageUtil;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
-import cn.edu.nwsuaf.cie.ssms.util.UserCheck;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +46,7 @@ public class CloseInfoServiceImpl implements CloseInfoService {
 
     @Override
     public Result getAll(int page, int nums) {
-        return Result.success(closeInfoMapper.selectByStat(CloseInfo.STAT_OK));
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return Result.success(closeInfoMapper.selectByStatAndNums(CloseInfo.STAT_OK, pageInfo[0], pageInfo[1]));
     }
 }

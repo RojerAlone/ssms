@@ -6,10 +6,7 @@ import cn.edu.nwsuaf.cie.ssms.mapper.OrderMapper;
 import cn.edu.nwsuaf.cie.ssms.model.Order;
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
-import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
-import cn.edu.nwsuaf.cie.ssms.util.Result;
-import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
-import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
+import cn.edu.nwsuaf.cie.ssms.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Result getMyOrders(int nums) {
+    public Result getMyOrders(int page, int nums) {
         if (nums <= 0) {
             LOGGER.warn("getMyOrders - error param : nums {}", nums);
             return Result.errorParam();
@@ -55,30 +52,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Result getNotPaiedOrders(int nums) {
-        if (nums <= 0) {
-            LOGGER.warn("getNotPaiedOrders - error param : nums {}", nums);
-            return Result.errorParam();
-        }
-        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_NOT_PAY, nums));
+    public Result getNotPaiedOrders(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_NOT_PAY,
+                pageInfo[0], pageInfo[1]));
     }
 
     @Override
-    public Result getPaiedOrders(int nums) {
-        if (nums <= 0) {
-            LOGGER.warn("getPaiedOrders - error param : nums {}", nums);
-            return Result.errorParam();
-        }
-        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_PAIED, nums));
+    public Result getPaiedOrders(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_PAIED,
+                pageInfo[0], pageInfo[1]));
     }
 
     @Override
-    public Result getCanceledOrders(int nums) {
-        if (nums <= 0) {
-            LOGGER.warn("getCanceledOrders - error param : nums {}", nums);
-            return Result.errorParam();
-        }
-        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_CANCEL, nums));
+    public Result getCanceledOrders(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_CANCEL,
+                pageInfo[0], pageInfo[1]));
     }
 
     @Override

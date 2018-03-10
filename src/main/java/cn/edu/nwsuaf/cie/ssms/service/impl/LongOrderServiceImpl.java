@@ -3,6 +3,7 @@ package cn.edu.nwsuaf.cie.ssms.service.impl;
 import cn.edu.nwsuaf.cie.ssms.mapper.LongOrderMapper;
 import cn.edu.nwsuaf.cie.ssms.model.LongOrder;
 import cn.edu.nwsuaf.cie.ssms.service.LongOrderService;
+import cn.edu.nwsuaf.cie.ssms.util.PageUtil;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +44,8 @@ public class LongOrderServiceImpl implements LongOrderService {
     }
 
     @Override
-    public Result getAll(int nums) {
-        if (nums < 0) {
-            LOGGER.warn("getAll - error param : nums {}", nums);
-            return Result.errorParam();
-        }
-        return Result.success(longOrderMapper.selectByStatAndNums(LongOrder.STAT_OK, nums));
+    public Result getAll(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return Result.success(longOrderMapper.selectByStatAndNums(LongOrder.STAT_OK, pageInfo[0], pageInfo[1]));
     }
 }

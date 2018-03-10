@@ -12,6 +12,6 @@ public interface LongOrderService {
 
     Result delete(int id);
 
-    Result getAll(int nums);
+    Result getAll(int page, int nums);
 
 }

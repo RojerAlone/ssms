@@ -19,7 +19,7 @@ public class LongOrderController {
     @GetMapping("/all")
     public Result getAll(@RequestParam(value = "page", defaultValue = "1") int page,
                          @RequestParam(value = "nums", defaultValue = "10") int nums) {
-        return longOrderService.getAll(nums);
+        return longOrderService.getAll(page, nums);
     }
 
     @PutMapping("/add")
