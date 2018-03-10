@@ -1,21 +1,19 @@
-package cn.edu.nwsuaf.cie.ssms.util;
+package cn.edu.nwsuaf.cie.ssms.service;
 
 import cn.edu.nwsuaf.cie.ssms.mapper.WorkerMapper;
 import cn.edu.nwsuaf.cie.ssms.model.Access;
 import cn.edu.nwsuaf.cie.ssms.model.Worker;
+import cn.edu.nwsuaf.cie.ssms.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author RojerAlone
  * @Date 2017-12-11 22:33
  */
-public class UserCheck {
+public class UserAccessService {
 
     @Autowired
     private static WorkerMapper workerMapper;
@@ -65,6 +63,16 @@ public class UserCheck {
     public static void removeWorker(String uid) {
         WORKERS.remove(uid);
         workerMapper.delete(uid, Worker.WORKER);
+    }
+
+    public static List<String> getAdmin(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return new ArrayList<>(ADMINS).subList(pageInfo[0], pageInfo[0] + pageInfo[1]);
+    }
+
+    public static List<String> getWorker(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return new ArrayList<>(WORKERS).subList(pageInfo[0], pageInfo[0] + pageInfo[1]);
     }
 
     public static boolean isAdmin(String uid) {

@@ -1,6 +1,6 @@
 package cn.edu.nwsuaf.cie.ssms.interceptor;
 
-import cn.edu.nwsuaf.cie.ssms.util.UserCheck;
+import cn.edu.nwsuaf.cie.ssms.service.UserAccessService;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (!UserCheck.isAdmin(userHolder.getUser().getUid())) {
+        if (!UserAccessService.isAdmin(userHolder.getUser().getUid())) {
             LOGGER.warn("permission denied, uid {}", userHolder.getUser().getUid());
             response.sendRedirect("/notAdmin");
             return false;

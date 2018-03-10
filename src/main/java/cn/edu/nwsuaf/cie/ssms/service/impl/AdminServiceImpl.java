@@ -2,7 +2,7 @@ package cn.edu.nwsuaf.cie.ssms.service.impl;
 
 import cn.edu.nwsuaf.cie.ssms.service.AdminService;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
-import cn.edu.nwsuaf.cie.ssms.util.UserCheck;
+import cn.edu.nwsuaf.cie.ssms.service.UserAccessService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,15 +13,15 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements AdminService {
 
     public Result addWorker(String uid) {
-        if (!UserCheck.check(uid)) {
+        if (!UserAccessService.check(uid)) {
             return Result.errorParam();
         }
-        UserCheck.addWorker(uid);
+        UserAccessService.addWorker(uid);
         return Result.success();
     }
 
     public Result removeWorker(String uid) {
-        UserCheck.removeWorker(uid);
+        UserAccessService.removeWorker(uid);
         return Result.success();
     }
 
