@@ -45,3 +45,9 @@ CREATE TABLE IF NOT EXISTS `ssms`.`longorder` (
   `stat` INT NOT NULL DEFAULT 0 COMMENT '0 表示正常，1 表示已删除',
   PRIMARY KEY (`id`)
 ) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '长期预订信息';
+
+CREATE TABLE IF NOT EXISTS `ssms`.`worker` (
+  `uid` VARCHAR(10) NOT NULL COMMENT '学工号',
+  `type` INT NOT NULL COMMENT '类型，0 表示普通工作人员，1 表示管理员',
+  PRIMARY KEY (`uid`, `type`)
+) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '工作人员信息';

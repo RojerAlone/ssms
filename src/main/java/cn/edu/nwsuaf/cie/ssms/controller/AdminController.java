@@ -22,7 +22,7 @@ public class AdminController extends AbstractController {
     @Autowired
     private UserHolder userHolder;
 
-    @PostMapping("/")
+    @PostMapping("/login")
     public Result login(@RequestParam String uid, @RequestParam String authToken, HttpServletResponse response) {
         if (userHolder.getUser() != null && userHolder.getUser().getUid().equals(uid)) {
             return Result.success();
