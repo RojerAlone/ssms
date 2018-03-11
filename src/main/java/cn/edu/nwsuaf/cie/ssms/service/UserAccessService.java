@@ -6,26 +6,41 @@ import cn.edu.nwsuaf.cie.ssms.model.Worker;
 import cn.edu.nwsuaf.cie.ssms.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
  * @author RojerAlone
  * @Date 2017-12-11 22:33
  */
+@Service
+@PropertySource("classpath:application.yml")
 public class UserAccessService {
 
-    @Autowired
     private static WorkerMapper workerMapper;
 
-    @Value("#{root.username}")
     private static String ROOT;
 
     private static final Set<String> ADMINS = new HashSet<>();
 
     private static final Set<String> WORKERS = new HashSet<>();
 
-    static {
+    @Value("${root.username}")
+    public void setROOT(String root) {
+        ROOT = root;
+    }
+
+    @Autowired
+    public void setWorkerMapper(WorkerMapper mapper) {
+        workerMapper = mapper;
+    }
+
+    @PostConstruct
+    public void init() {
+        System.out.println(ROOT.length());
         List<Worker> workers = workerMapper.getAll();
         for (Worker worker : workers) {
             if (worker.getType() == Worker.ADMIN) {
