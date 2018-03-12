@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -17,31 +18,36 @@ import java.util.*;
 @Service
 public class UserAccessService {
 
-    @Autowired
     private static WorkerMapper workerMapper;
 
-//    public void setMapper(WorkerMapper mapper) {
-//        workerMapper = mapper;
-//    }
-
-    @Value("#{root.username}")
     private static String ROOT;
 
     private static final Set<String> ADMINS = new HashSet<>();
 
     private static final Set<String> WORKERS = new HashSet<>();
 
-//    static {
-//        List<Worker> workers = workerMapper.getAll();
-//        for (Worker worker : workers) {
-//            if (worker.getType() == Worker.ADMIN) {
-//                ADMINS.add(worker.getUid());
-//            }
-//            if (worker.getType() == Worker.WORKER) {
-//                WORKERS.add(worker.getUid());
-//            }
-//        }
-//    }
+    @Value("${root.username}")
+    public void setROOT(String root) {
+        ROOT = root;
+    }
+
+    @Autowired
+    public void setWorkerMapper(WorkerMapper mapper) {
+        workerMapper = mapper;
+    }
+
+    @PostConstruct
+    public void init() {
+        List<Worker> workers = workerMapper.getAll();
+        for (Worker worker : workers) {
+            if (worker.getType() == Worker.ADMIN) {
+                ADMINS.add(worker.getUid());
+            }
+            if (worker.getType() == Worker.WORKER) {
+                WORKERS.add(worker.getUid());
+            }
+        }
+    }
 
     public static boolean check(String uid) {
         return uid.length() == 10;
