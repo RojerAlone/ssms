@@ -1,8 +1,10 @@
 package cn.edu.nwsuaf.cie.ssms.config;
 
+import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +24,10 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result errorHandler(HttpServletRequest request, Exception e) {
         if (e instanceof MissingServletRequestParameterException) {
-            return Result.errorParam();
+            return Result.missParam(((MissingServletRequestParameterException) e).getParameterName());
+        }
+        if (e instanceof HttpRequestMethodNotSupportedException) {
+            return Result.error(String.format(MsgCenter.NOT_SUPPORT_METHOD, ((HttpRequestMethodNotSupportedException) e).getMethod()));
         }
         LOGGER.error("inner error", e);
         return Result.innerError();

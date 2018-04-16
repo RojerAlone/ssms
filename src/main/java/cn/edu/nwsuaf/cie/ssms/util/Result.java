@@ -39,6 +39,10 @@ public class Result {
         return Result.error(MsgCenter.ERROR_PARAMS);
     }
 
+    public static Result missParam(String paramName) {
+        return Result.error(String.format(MsgCenter.MISS_PARAMS, paramName));
+    }
+
     public boolean isSuccess() {
         return success;
     }

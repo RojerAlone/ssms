@@ -5,10 +5,7 @@ import cn.edu.nwsuaf.cie.ssms.util.LoginResultUtil;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,4 +27,13 @@ public class UserController extends AbstractController {
         return LoginResultUtil.parseResult(CommonService.login(uid, authToken), response, 7);
     }
 
+    @GetMapping("sport")
+    public Result sport() {
+        return Result.success();
+    }
+
+    @GetMapping("cost")
+    public Result cost() {
+        return Result.success();
+    }
 }
