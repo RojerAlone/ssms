@@ -11,6 +11,7 @@ import cn.edu.nwsuaf.cie.ssms.util.CommonCache;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -18,16 +19,33 @@ import java.util.List;
 /**
  * Created by zhangrenjie on 2017-12-11
  */
+@Service
 public class CommonService {
 
-    @Autowired
     private static OrderMapper orderMapper;
-    @Autowired
     private static CloseInfoMapper closeInfoMapper;
-    @Autowired
     private static LongOrderMapper longOrderMapper;
-    @Autowired
     private static CommonCache cache;
+
+    @Autowired
+    public  void setOrderMapper(OrderMapper orderMapper) {
+        CommonService.orderMapper = orderMapper;
+    }
+
+    @Autowired
+    public void setCloseInfoMapper(CloseInfoMapper closeInfoMapper) {
+        CommonService.closeInfoMapper = closeInfoMapper;
+    }
+
+    @Autowired
+    public void setLongOrderMapper(LongOrderMapper longOrderMapper) {
+        CommonService.longOrderMapper = longOrderMapper;
+    }
+
+    @Autowired
+    public void setCache(CommonCache cache) {
+        CommonService.cache = cache;
+    }
 
     /**
      * 检测某场地某个时间段内是否可用
