@@ -1,4 +1,4 @@
-package cn.edu.nwsuaf.cie.ssms.service;
+package cn.edu.nwsuaf.cie.ssms.util;
 
 import cn.edu.nwsuaf.cie.ssms.mapper.WorkerMapper;
 import cn.edu.nwsuaf.cie.ssms.model.Access;
@@ -6,7 +6,7 @@ import cn.edu.nwsuaf.cie.ssms.model.Worker;
 import cn.edu.nwsuaf.cie.ssms.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -15,8 +15,8 @@ import java.util.*;
  * @author RojerAlone
  * @Date 2017-12-11 22:33
  */
-@Service
-public class UserAccessService {
+@Component
+public class UserAccessUtil {
 
     private static WorkerMapper workerMapper;
 

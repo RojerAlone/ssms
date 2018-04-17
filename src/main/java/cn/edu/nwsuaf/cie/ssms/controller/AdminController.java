@@ -1,7 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.controller;
 
 import cn.edu.nwsuaf.cie.ssms.service.AdminService;
-import cn.edu.nwsuaf.cie.ssms.service.UserAccessService;
+import cn.edu.nwsuaf.cie.ssms.util.UserAccessUtil;
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class AdminController extends AbstractController {
         if (userHolder.getUser() != null && userHolder.getUser().getUid().equals(uid)) {
             return Result.success();
         }
-        if (!UserAccessService.isAdmin(uid)) {
+        if (!UserAccessUtil.isAdmin(uid)) {
             return Result.error(MsgCenter.ERROR_AUTH);
         }
         return LoginResultUtil.parseResult(CommonService.login(uid, authToken), response, 1);
@@ -47,6 +47,6 @@ public class AdminController extends AbstractController {
     @GetMapping("/worker/all")
     public Result getWorker(@RequestParam(value = "page", defaultValue = "1") int page,
                             @RequestParam(value = "nums", defaultValue = "10") int nums) {
-        return Result.success(UserAccessService.getWorker(page, nums));
+        return Result.success(UserAccessUtil.getWorker(page, nums));
     }
 }

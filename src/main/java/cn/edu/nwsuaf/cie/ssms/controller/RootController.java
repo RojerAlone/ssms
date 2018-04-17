@@ -1,7 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.controller;
 
 import cn.edu.nwsuaf.cie.ssms.service.RootService;
-import cn.edu.nwsuaf.cie.ssms.service.UserAccessService;
+import cn.edu.nwsuaf.cie.ssms.util.UserAccessUtil;
 import cn.edu.nwsuaf.cie.ssms.util.LoginResultUtil;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class RootController {
     @GetMapping("/admin/all")
     public Result getAdmin(@RequestParam(value = "page", defaultValue = "1") int page,
                            @RequestParam(value = "nums", defaultValue = "10") int nums) {
-        return Result.success(UserAccessService.getAdmin(page, nums));
+        return Result.success(UserAccessUtil.getAdmin(page, nums));
     }
 
 }

@@ -1,6 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.controller;
 
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
+import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.LoginResultUtil;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
@@ -18,6 +19,8 @@ public class UserController extends AbstractController {
 
     @Autowired
     private UserHolder userHolder;
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("login")
     public Result login(@RequestParam String uid, @RequestParam String authToken, HttpServletResponse response) {
@@ -29,11 +32,11 @@ public class UserController extends AbstractController {
 
     @GetMapping("sport")
     public Result sport() {
-        return Result.success();
+        return orderService.getSportTime();
     }
 
     @GetMapping("cost")
     public Result cost() {
-        return Result.success();
+        return orderService.getCost();
     }
 }

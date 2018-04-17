@@ -36,6 +36,10 @@ public interface OrderMapper {
     List<Order> selectByUidAndStat(@Param("uid") String uid, @Param("stat") int stat,
                                    @Param("page") int page, @Param("nums") int nums);
 
+    @Select("select * from `order` where uid = #{uid} and stat = #{stat} and (`start_time` between #{startDate} and #{endDate})")
+    List<Order> selectByStatAndUidAndTime(@Param("uid") String uid, @Param("stat") int stat,
+                                          @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
     @Update("update `order` set stat=#{stat} where id = #{id}")
     int updateStatById(@Param("id") int id, @Param("stat") int stat);
 

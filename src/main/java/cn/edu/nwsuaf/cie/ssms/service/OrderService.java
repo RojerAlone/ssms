@@ -2,6 +2,8 @@ package cn.edu.nwsuaf.cie.ssms.service;
 
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 
+import java.util.Date;
+
 /**
  * Created by zhangrenjie on 2017-11-28
  */
@@ -31,5 +33,9 @@ public interface OrderService {
      * 支付订单
      */
     Result pay(int orderId);
+
+    Result getCost();
+
+    Result getSportTime();
 
 }

@@ -5,7 +5,7 @@ import cn.edu.nwsuaf.cie.ssms.service.RootService;
 import cn.edu.nwsuaf.cie.ssms.util.RootAuthUtil;
 import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
-import cn.edu.nwsuaf.cie.ssms.service.UserAccessService;
+import cn.edu.nwsuaf.cie.ssms.util.UserAccessUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -25,15 +25,15 @@ public class RootServiceImpl implements RootService {
     }
 
     public Result addAdmin(String uid) {
-        if (!UserAccessService.check(uid)) {
+        if (!UserAccessUtil.check(uid)) {
             return Result.errorParam();
         }
-        UserAccessService.addAdmin(uid);
+        UserAccessUtil.addAdmin(uid);
         return Result.success();
     }
 
     public Result removeAdmin(String uid) {
-        UserAccessService.removeAdmin(uid);
+        UserAccessUtil.removeAdmin(uid);
         return Result.success();
     }
 

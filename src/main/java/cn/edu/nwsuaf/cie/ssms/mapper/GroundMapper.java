@@ -14,4 +14,7 @@ public interface GroundMapper {
     @Select("select * from ground where type = #{type}")
     List<Ground> selectByType(int type);
 
+    @Select("select * from ground")
+    List<Ground> selectAllInfo();
+
 }

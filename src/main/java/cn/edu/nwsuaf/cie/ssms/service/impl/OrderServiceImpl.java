@@ -7,12 +7,18 @@ import cn.edu.nwsuaf.cie.ssms.model.Order;
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.*;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -22,6 +28,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class OrderServiceImpl implements OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    /**
+     * 统计数据时候默认统计天数
+     */
+    private static final int COUNT_DAYS = 7;
 
     private static ReentrantLock lock = new ReentrantLock();
 
@@ -129,6 +140,60 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Result pay(int orderId) {
         return null;
+    }
+
+    @Override
+    public Result getCost() {
+        List<Order> orders = getPersonalOrder();
+        if (orders.isEmpty()) {
+            return Result.success();
+        }
+        Map<String, Integer> costInfo = new HashMap<>();
+        for (Order order : orders) {
+            String typeName = GroundUtil.getGroundTypeNameByGid(order.getGid());
+            costInfo.put(typeName, costInfo.getOrDefault(typeName, 0) + order.getTotal());
+        }
+        JSONArray jsonArray = new JSONArray();
+        for (Map.Entry<String, Integer> entry : costInfo.entrySet()) {
+            JSONObject json = new JSONObject();
+            json.put("type", entry.getKey());
+            json.put("value", entry.getValue());
+            jsonArray.add(json);
+        }
+        return Result.success(jsonArray);
+    }
+
+    @Override
+    public Result getSportTime() {
+        List<Order> orders = getPersonalOrder();
+        if (orders.isEmpty()) {
+            return Result.success();
+        }
+        Map<String, Long> costInfo = new HashMap<>();
+        for (Order order : orders) {
+            String typeName = GroundUtil.getGroundTypeNameByGid(order.getGid());
+            long times = order.getEndTime().getTime() - order.getStartTime().getTime();
+            costInfo.put(typeName, costInfo.getOrDefault(typeName, 0L) + times);
+        }
+        JSONArray jsonArray = new JSONArray();
+        for (Map.Entry<String, Long> entry : costInfo.entrySet()) {
+            JSONObject json = new JSONObject();
+            json.put("type", entry.getKey());
+            json.put("value", entry.getValue() / TimeUtil.ONE_HOUR);
+            jsonArray.add(json);
+        }
+        return Result.success(jsonArray);
+    }
+
+    /**
+     * 获取用户最近 COUNT_DAY 的订单
+     */
+    private List<Order> getPersonalOrder() {
+        String uid = userHolder.getUser().getUid();
+        int stat = Order.STAT_PAIED;
+        Date endDate = new Date();
+        Date startDate = DateUtils.addDays(endDate, -COUNT_DAYS);
+        return orderMapper.selectByStatAndUidAndTime(uid, stat, startDate, endDate);
     }
 
 }

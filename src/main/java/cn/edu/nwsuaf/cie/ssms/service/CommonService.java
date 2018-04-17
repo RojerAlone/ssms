@@ -10,6 +10,7 @@ import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.util.CommonCache;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
+import cn.edu.nwsuaf.cie.ssms.util.UserAccessUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -99,7 +100,7 @@ public class CommonService {
         }
         user = new User();
         user.setUid(uid);
-        user.setAccess(UserAccessService.getAccess(uid));
+        user.setAccess(UserAccessUtil.getAccess(uid));
         cache.put(token, user);
         return Result.success(token);
     }
