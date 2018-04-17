@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ public class GroundUtil {
     @PostConstruct
     public void init() {
         List<Ground> grounds = groundMapper.selectAllInfo();
+        groundInfo = new HashMap<>(grounds.size());
         for (Ground ground : grounds) {
             // 直接 substring(0, 3)，因为所有的名字都是前三位是某种场地，比如健美操室、羽毛球场
             groundInfo.put(ground.getId(), ground.getName().substring(0, 3));
