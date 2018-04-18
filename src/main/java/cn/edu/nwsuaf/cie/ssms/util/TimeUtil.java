@@ -20,6 +20,8 @@ public class TimeUtil {
 
     public static final long ONE_HOUR = 1000 * 60 * 60;
 
+    public static final long HALF_HOUR = ONE_HOUR / 2;
+
     public static final long ONE_DAY = ONE_HOUR * 24;
 
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
@@ -62,7 +64,7 @@ public class TimeUtil {
      * 检测时间是否合法（开始时间在结束时间之前同时时间差是整时的）
      */
     public static boolean checkTime(long startTime, long endTime) {
-        return startTime < endTime && (endTime - startTime) % TimeUtil.ONE_HOUR == 0;
+        return startTime < endTime && (endTime - startTime) % TimeUtil.HALF_HOUR == 0;
     }
 
     /**
