@@ -8,6 +8,7 @@ import org.apache.ibatis.jdbc.SQL;
 import java.util.Date;
 import java.util.List;
 
+@Deprecated
 @Mapper
 public interface LongOrderMapper {
 

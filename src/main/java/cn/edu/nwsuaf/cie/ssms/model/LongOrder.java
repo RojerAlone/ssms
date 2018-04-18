@@ -2,6 +2,7 @@ package cn.edu.nwsuaf.cie.ssms.model;
 
 import java.util.Date;
 
+@Deprecated
 public class LongOrder {
 
     public static final int STAT_OK = 0;

@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by zhangrenjie on 2017-12-12
+ * 暂时不考虑长期订单
  */
-@RestController
+@Deprecated
+//@RestController
 @RequestMapping("/longorder")
 public class LongOrderController {
 

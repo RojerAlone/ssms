@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by zhangrenjie on 2017-12-12
  */
+@Deprecated
 @Service
 public class LongOrderServiceImpl implements LongOrderService {
 

@@ -70,26 +70,26 @@ public class CommonService {
             }
         }
         // 查看是否被长期订单预订
-        List<LongOrder> longOrders = longOrderMapper.selectByGidAndStatAndDate(gid, LongOrder.STAT_OK, startDateTime);
-        for (LongOrder longOrder : longOrders) {
-            if (longOrder.getWeekday() != TimeUtil.getWeekday(startDateTime)) {
-                continue;
-            }
-            if (longOrder.getStartTime() == null) { // 整天都不开放
-                return true;
-            } else {
-                if (longOrder.getEndTime() == null) { // 如果长期订单开始时间从开始到当天结束
-                    if (TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) == 1) { // 如果查询的结束时间大于长订单开始时间
-                        return true;
-                    }
-                } else { // 如果开始时间和结束时间都不为空
-                    if (!(TimeUtil.compareTime(startDateTime, longOrder.getEndTime()) != -1
-                            || TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) != 1)) {
-                        return true;
-                    }
-                }
-            }
-        }
+//        List<LongOrder> longOrders = longOrderMapper.selectByGidAndStatAndDate(gid, LongOrder.STAT_OK, startDateTime);
+//        for (LongOrder longOrder : longOrders) {
+//            if (longOrder.getWeekday() != TimeUtil.getWeekday(startDateTime)) {
+//                continue;
+//            }
+//            if (longOrder.getStartTime() == null) { // 整天都不开放
+//                return true;
+//            } else {
+//                if (longOrder.getEndTime() == null) { // 如果长期订单开始时间从开始到当天结束
+//                    if (TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) == 1) { // 如果查询的结束时间大于长订单开始时间
+//                        return true;
+//                    }
+//                } else { // 如果开始时间和结束时间都不为空
+//                    if (!(TimeUtil.compareTime(startDateTime, longOrder.getEndTime()) != -1
+//                            || TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) != 1)) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
         return false;
     }
 
