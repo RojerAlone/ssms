@@ -40,6 +40,16 @@ public interface OrderMapper {
     List<Order> selectByStatAndUidAndTime(@Param("uid") String uid, @Param("stat") int stat,
                                           @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
+    /**
+     * 使用 TO_DAYS() 函数来获取从公元0年到指定日期经过的天数，从而确定是不是同一天
+     * 同时这里的 SQL 语句混入了业务逻辑，直接获取了羽毛球馆或者健美操室的信息
+     */
+    @Select("select * from `order` where gid <= 12 and stat != #{stat} and TO_DAYS(start_time)=TO_DAYS(#{date})")
+    List<Order> selectBadmintonByDateAndExcludeStat(@Param("stat") int stat, @Param("date") Date date);
+
+    @Select("select * from `order` where gid = 13 and stat = #{stat} and TO_DAYS(start_time) >= TO_DAYS(#{startDate}) and TO_DAYS(start_time) <= TO_DAYS(#{endDate})")
+    List<Order> selectGymnasticsByDatesAndStat(@Param("stat") int stat, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
     @Update("update `order` set stat=#{stat} where id = #{id}")
     int updateStatById(@Param("id") int id, @Param("stat") int stat);
 

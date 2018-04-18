@@ -22,7 +22,7 @@ public interface OrderService {
     /**
      * 预订场地
      */
-    Result order(int gid, long startTime, long endTime);
+    Result order(int gid, String startTime, String endTime);
 
     /**
      * 取消预订

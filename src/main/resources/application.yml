@@ -18,3 +18,14 @@ mybatis:
 root:
   username: admin
   pswd: 5ff4b333705ff53f7c44e8a4b71a90bf # RootAuthUtil 生成的加密数据
+properties:
+  price:
+    student: 8
+    teacher: 15
+  time:
+    summer:
+      start: '16:30'
+      end: '22:00'
+    winter:
+      start: '16:00'
+      end: '21:30'

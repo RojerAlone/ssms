@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  * Created by zhangrenjie on 2017-12-07
  */
@@ -19,8 +21,18 @@ public class GroundController extends AbstractController {
     private GroundService groundService;
 
     @GetMapping("/all")
-    public Result getAll(@RequestParam int type, @RequestParam long startTime, @RequestParam long endTime) {
+    public Result getAll(@RequestParam int type, @RequestParam String startTime, @RequestParam String endTime) {
         return groundService.getEmptyGround(type, startTime, endTime);
+    }
+
+    @GetMapping("/badminton")
+    public Result getBadmintonInfo(@RequestParam(value = "date", required = false) String date) {
+        return groundService.getBadmintonInfo(date);
+    }
+
+    @GetMapping("/gymnastics")
+    public Result getGymnasticsInfo() {
+        return groundService.getWeekGymnastics();
     }
 
 }

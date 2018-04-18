@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -84,15 +85,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Result order(int gid, long startTime, long endTime) {
-        if (groundMapper.selectByPrimaryKey(gid) == null || !TimeUtil.checkTime(startTime, endTime)) {
+    public Result order(int gid, String startTime, String endTime) {
+        Date startDateTime = null;
+        Date endDateTime = null;
+        try {
+            startDateTime = TimeUtil.parseDateTime(startTime);
+            endDateTime = TimeUtil.parseDateTime(endTime);
+        } catch (ParseException e) {
+            LOGGER.error("error time format", e);
+            return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
+        }
+        if (groundMapper.selectByPrimaryKey(gid) == null || !TimeUtil.checkTime(startDateTime.getTime(), endDateTime.getTime())) {
             LOGGER.warn("order - error param : gid {}, startTime {}, endTime {}", gid, startTime, endTime);
             return Result.errorParam();
         }
         try {
             lock.lock();
-            Date startDateTime = new Date(startTime);
-            Date endDateTime = new Date(endTime);
             if (orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(gid, startDateTime, endDateTime, Order.STAT_CANCEL) > 0
                     || CommonService.isUsed(gid, startDateTime, endDateTime)) {
                 return Result.error(MsgCenter.GROUND_ORDERED);
@@ -102,10 +110,11 @@ public class OrderServiceImpl implements OrderService {
             order.setUid(userHolder.getUser().getUid());
             order.setStartTime(new Date(startTime));
             order.setEndTime(new Date(endTime));
+            int times = (int) ((endDateTime.getTime() - startDateTime.getTime()) / TimeUtil.ONE_HOUR);
             if (userHolder.getUser().isStudent()) {
-                order.setTotal((int) (Price.STUDENT_PRICE * (endTime - startTime) / TimeUtil.ONE_HOUR));
+                order.setTotal(Price.STUDENT_PRICE * times);
             } else {
-                order.setTotal((int) (Price.TEACHER_PRICE * (endTime - startTime) / TimeUtil.ONE_HOUR));
+                order.setTotal(Price.TEACHER_PRICE * times);
             }
             if (orderMapper.insert(order) == 1) {
                 return Result.success(order.getId());

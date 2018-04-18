@@ -16,6 +16,8 @@ public class MsgCenter {
 
     public static final String MISS_PARAMS = "缺少参数: %s";
 
+    public static final String ERROR_TIME_FORMAT = "时间格式错误: %s";
+
     public static final String ORDER_CANCEL_FAILED = "订单生效前 1 天内禁止取消订单";
 
     public static final String NOT_LOGIN = "您还没有登录，请登录后重试";

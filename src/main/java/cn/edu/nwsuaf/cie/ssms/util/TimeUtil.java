@@ -1,5 +1,10 @@
 package cn.edu.nwsuaf.cie.ssms.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,7 +13,10 @@ import java.util.Date;
 /**
  * Created by zhangrenjie on 2017-12-04
  */
+@Component
 public class TimeUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TimeUtil.class);
 
     public static final long ONE_HOUR = 1000 * 60 * 60;
 
@@ -21,7 +29,35 @@ public class TimeUtil {
     private static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private static final Calendar CALENDAR = Calendar.getInstance();
-    
+
+    public static String SUMMER_START_TIME;
+
+    public static String SUMMER_END_TIME;
+
+    public static String WINTER_START_TIME;
+
+    public static String WINTER_END_TIME;
+
+    @Value("${properties.time.summer.start}")
+    public void setSummerStartTime(String summerStartTime) {
+        SUMMER_START_TIME = summerStartTime;
+    }
+
+    @Value("${properties.time.summer.end}")
+    public void setSummerEndTime(String summerEndTime) {
+        SUMMER_END_TIME = summerEndTime;
+    }
+
+    @Value("${properties.time.winter.start}")
+    public void setWinterStartTime(String winterStartTime) {
+        WINTER_START_TIME = winterStartTime;
+    }
+
+    @Value("${properties.time.winter.end}")
+    public void setWinterEndTime(String winterEndTime) {
+        WINTER_END_TIME = winterEndTime;
+    }
+
     /**
      * 检测时间是否合法（开始时间在结束时间之前同时时间差是整时的）
      */
@@ -69,38 +105,6 @@ public class TimeUtil {
     }
 
     /**
-     * 比较两个时间的时分
-     */
-    public static int compareTime(Date date1, Date date2) {
-        if (date1 == null || date2 == null) {
-            throw new IllegalArgumentException("date con't be null");
-        }
-        try {
-            String[] dateStr1 = formatDateTime(date1).split(" ")[1].split(":");
-            String[] dateStr2 = formatDateTime(date2).split(" ")[1].split(":");
-            int hour1 = Integer.valueOf(dateStr1[0]);
-            int hour2 = Integer.valueOf(dateStr2[0]);
-            if (hour1 > hour2) {
-                return 1;
-            } else if (hour1 < hour2) {
-                return -1;
-            } else {
-                int minute1 = Integer.valueOf(dateStr1[1]);
-                int minute2 = Integer.valueOf(dateStr2[1]);
-                if (minute1 > minute2) {
-                    return 1;
-                } else if (minute1 < minute2) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException("error date format", e);
-        }
-    }
-
-    /**
      * 获取日期是星期几
      * @param date
      * @return
@@ -110,6 +114,50 @@ public class TimeUtil {
             CALENDAR.setTime(date);
             return CALENDAR.get(Calendar.DAY_OF_WEEK);
         }
+    }
+
+    /**
+     * 判断某天是否是夏季作息时间
+     */
+    public static boolean isSummer(Date date) {
+        int month = Integer.valueOf(DATE_FORMATTER.format(date).substring(5, 7));
+        return 5 <= month && month < 10;
+    }
+
+    /**
+     * 判断时间是否合法
+     */
+    public static boolean validateTime(Date date) {
+        return getNumOfHalfHourDistanceStartTime(date) != -1;
+    }
+
+    /**
+     * 获取指定时间到开馆时间之间距离了多少个半小时
+     * 如果数据不合法（不以整小时或者半小时为单位、在开馆时间之前），返回 -1
+     */
+    public static int getNumOfHalfHourDistanceStartTime(Date date) {
+        String timeStr = TIME_FORMATTER.format(date);
+        String[] tmp = timeStr.split(":");
+        int hour1 = Integer.valueOf(tmp[0]);
+        int minute1 = Integer.valueOf(tmp[1]);
+        if (minute1 != 0 && minute1 != 30) {
+            return -1;
+        }
+        int hour2;
+        int minute2;
+        if (isSummer(date)) {
+            tmp = SUMMER_START_TIME.split(":");
+            hour2 = Integer.valueOf(tmp[0]);
+            minute2 = Integer.valueOf(tmp[1]);
+        } else {
+            tmp = WINTER_START_TIME.split(":");
+            hour2 = Integer.valueOf(tmp[0]);
+            minute2 = Integer.valueOf(tmp[1]);
+        }
+        if (hour1 < hour2) {
+            return -1;
+        }
+        return  (hour1 - hour2) * 2 + (minute1 - minute2) / 30;
     }
 
 }

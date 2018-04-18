@@ -47,9 +47,7 @@ public class OrderServiceTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         String startTimeStr = "2017-12-03 14:00";
         String endTimeStr = "2017-12-03 16:00";
-        long startTime = sdf.parse(startTimeStr).getTime();
-        long endTime = sdf.parse(endTimeStr).getTime();
-        Result result = orderService.order(gid, startTime, endTime);
+        Result result = orderService.order(gid, startTimeStr, endTimeStr);
         LOGGER.info("order : {}", result);
     }
 

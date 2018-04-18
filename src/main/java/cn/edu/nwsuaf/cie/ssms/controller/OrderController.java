@@ -16,7 +16,7 @@ public class OrderController extends AbstractController {
     private OrderService orderService;
 
     @PutMapping("/order")
-    public Result order(@RequestParam int gid, @RequestParam long startTime, @RequestParam long endTime) {
+    public Result order(@RequestParam int gid, @RequestParam String startTime, @RequestParam String endTime) {
         return orderService.order(gid, startTime, endTime);
     }
 

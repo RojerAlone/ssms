@@ -1,16 +1,24 @@
 package cn.edu.nwsuaf.cie.ssms.service.impl;
 
+import cn.edu.nwsuaf.cie.ssms.mapper.CloseInfoMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.GroundMapper;
+import cn.edu.nwsuaf.cie.ssms.mapper.OrderMapper;
 import cn.edu.nwsuaf.cie.ssms.model.Ground;
+import cn.edu.nwsuaf.cie.ssms.model.Order;
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.service.GroundService;
+import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -24,75 +32,75 @@ public class GroundServiceImpl implements GroundService {
 
     @Autowired
     private GroundMapper groundMapper;
-//    @Autowired
-//    private CloseInfoMapper closeInfoMapper;
-//    @Autowired
-//    private LongOrderMapper longOrderMapper;
-//    @Autowired
-//    private OrderMapper orderMapper;
+    @Autowired
+    private CloseInfoMapper closeInfoMapper;
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Override
-    public Result getEmptyGround(int type, long startTime, long endTime) {
+    public Result getEmptyGround(int type, String startTime, String endTime) {
         List<Ground> grounds;
-        if (!TimeUtil.checkTime(startTime, endTime) || (grounds = groundMapper.selectByType(type)).isEmpty()) {
+        Date startDateTime = null;
+        Date endDateTime = null;
+        try {
+            startDateTime = TimeUtil.parseDateTime(startTime);
+            endDateTime = TimeUtil.parseDateTime(endTime);
+        } catch (ParseException e) {
+            LOGGER.error("error time format", e);
+            return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
+        }
+        if (!TimeUtil.checkTime(startDateTime.getTime(), endDateTime.getTime()) || (grounds = groundMapper.selectByType(type)).isEmpty()) {
             LOGGER.warn("getEmptyGround - error param : type {}, startTime {}, endTime {}", type, startTime, endTime);
             return Result.errorParam();
         }
-        Date startDateTime = new Date(startTime);
-        Date endDateTime = new Date(endTime);
         for (Ground ground : grounds) {
             if (!ground.isUsed() && !CommonService.isUsed(ground.getId(), startDateTime, endDateTime)) {
                 ground.setUsed();
-//                // 查询场地是否被预订
-//                if (orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(
-//                        ground.getId(), startDateTime, endDateTime, Order.STAT_CANCEL) > 0) {
-//                    ground.setUsed();
-//                    continue;
-//                }
-//                // 如果场地没有被预订，查看该场地是否被关闭
-//                List<CloseInfo> closeInfos = closeInfoMapper.selectByGidAndStatAndCloseDate(ground.getId(),
-//                        CloseInfo.STAT_OK, startDateTime);
-//                if (!closeInfos.isEmpty()) {
-//                    for (CloseInfo closeInfo : closeInfos) {
-//                        if (closeInfo.getStartTime() == null
-//                                || (startDateTime.before(closeInfo.getStartTime()) && endDateTime.after(closeInfo.getStartTime()))
-//                                || closeInfo.getEndTime() == null
-//                                || startDateTime.before(closeInfo.getEndTime())) {
-//                            ground.setUsed();
-//                            break;
-//                        }
-//                    }
-//                    if (ground.isUsed()) {
-//                        continue;
-//                    }
-//                }
-//                // 查看是否被长期订单预订
-//                List<LongOrder> longOrders = longOrderMapper.selectByGidAndStatAndDate(ground.getId(), LongOrder.STAT_OK, startDateTime);
-//                for (LongOrder longOrder : longOrders) {
-//                    // TODO 时间判断
-//                    if (longOrder.getWeekday() != TimeUtil.getWeekday(startDateTime)) {
-//                        continue;
-//                    }
-//                    if (longOrder.getStartTime() == null) { // 整天都不开放
-//                        ground.setUsed();
-//                        break;
-//                    } else {
-//                        if (longOrder.getEndTime() == null) { // 如果长期订单开始时间从开始到当天结束
-//                            if (TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) == 1) { // 如果查询的结束时间大于长订单开始时间
-//                                ground.setUsed();
-//                                break;
-//                            }
-//                        } else { // 如果开始时间和结束时间都不为空
-//                            if (!(TimeUtil.compareTime(startDateTime, longOrder.getEndTime()) != -1
-//                                    || TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) != 1)) {
-//                                ground.setUsed();
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
             }
         }
         return Result.success(grounds);
+    }
+
+    @Override
+    public Result getBadmintonInfo(String dateStr) {
+        Date date = new Date();
+        if (dateStr != null) {
+            try {
+                date = TimeUtil.parseDateTime(dateStr);
+            } catch (ParseException e) {
+                LOGGER.error("error time format", e);
+                return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
+            }
+        }
+        List<Order> orders = orderMapper.selectBadmintonByDateAndExcludeStat(Order.STAT_CANCEL, date);
+        JSONArray data = new JSONArray();
+        for (Order order : orders) {
+            int start = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getStartTime());
+            int end = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getEndTime());
+            for (int i = start; i <= end; i++) {
+                data.add(new int[]{i, order.getGid(), order.getStat()});
+            }
+        }
+        JSONObject json = new JSONObject();
+        if (TimeUtil.isSummer(date)){
+            json.put("startTime", TimeUtil.SUMMER_START_TIME);
+            json.put("endTime", TimeUtil.SUMMER_END_TIME);
+        } else {
+            json.put("startTime", TimeUtil.WINTER_START_TIME);
+            json.put("endTime", TimeUtil.WINTER_END_TIME);
+        }
+        json.put("data", data);
+        return Result.success(json);
+    }
+
+    @Override
+    public Result getWeekGymnastics() {
+        Date endDate = new Date();
+        Date startDate = DateUtils.addDays(endDate, -7);
+        List<Order> orders = orderMapper.selectGymnasticsByDatesAndStat(Order.STAT_PAIED, startDate, endDate);
+        for (Order order : orders) {
+
+        }
+        return null;
     }
 }
