@@ -78,17 +78,25 @@ public class GroundServiceImpl implements GroundService {
             int start = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getStartTime());
             int end = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getEndTime());
             for (int i = start; i <= end; i++) {
+                /**
+                 * 前端使用 echarts 显示某天的预订情况，返回一个 array(time, gid, stat)
+                 * 渲染的时候 time 是横坐标，gid 是纵坐标，stat 是状态，不同的状态显示不同的颜色
+                 */
                 data.add(new int[]{i, order.getGid(), order.getStat()});
             }
         }
         JSONObject json = new JSONObject();
+        String startTime = null;
+        String endTime = null;
         if (TimeUtil.isSummer(date)){
-            json.put("startTime", TimeUtil.SUMMER_START_TIME);
-            json.put("endTime", TimeUtil.SUMMER_END_TIME);
+            startTime =  TimeUtil.SUMMER_START_TIME;
+            endTime = TimeUtil.SUMMER_END_TIME;
         } else {
-            json.put("startTime", TimeUtil.WINTER_START_TIME);
-            json.put("endTime", TimeUtil.WINTER_END_TIME);
+            startTime = TimeUtil.WINTER_START_TIME;
+            endTime = TimeUtil.WINTER_END_TIME;
         }
+        json.put("startTime", startTime);
+        json.put("endTime", endTime);
         json.put("data", data);
         return Result.success(json);
     }
@@ -98,9 +106,22 @@ public class GroundServiceImpl implements GroundService {
         Date endDate = new Date();
         Date startDate = DateUtils.addDays(endDate, -7);
         List<Order> orders = orderMapper.selectGymnasticsByDatesAndStat(Order.STAT_PAIED, startDate, endDate);
+        JSONArray data = new JSONArray();
         for (Order order : orders) {
-
+            try {
+                int start = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getStartTime());
+                int end = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getEndTime());
+                for (int i = start; i <= end; i++) {
+                    int distanceDays = TimeUtil.distanceDays(order.getStartTime(), startDate);
+                    data.add(new int[]{i, distanceDays, order.getStat()});
+                }
+            } catch (ParseException e) {
+                LOGGER.error("time parse error", e);
+                return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
+            }
         }
-        return null;
+        JSONObject json = new JSONObject();
+        json.put("data", data);
+        return Result.success(json);
     }
 }

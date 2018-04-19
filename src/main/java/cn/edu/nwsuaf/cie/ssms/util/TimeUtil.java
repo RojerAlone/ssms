@@ -162,4 +162,14 @@ public class TimeUtil {
         return  (hour1 - hour2) * 2 + (minute1 - minute2) / 30;
     }
 
+    /**
+     * 比较两个日期之间间隔的天数
+     * 不能直接用 getTime / 3600 / 1000 / 24 来比较，这里略去 时分秒 之后再进行比较
+     */
+    public static int distanceDays(Date date1, Date date2) throws ParseException {
+        long time1 = DATETIME_FORMATTER.parse(DATE_FORMATTER.format(date1)).getTime();
+        long time2 = DATETIME_FORMATTER.parse(DATE_FORMATTER.format(date2)).getTime();
+        return (int) ((time2 - time1) / (ONE_HOUR * 24));
+    }
+
 }
