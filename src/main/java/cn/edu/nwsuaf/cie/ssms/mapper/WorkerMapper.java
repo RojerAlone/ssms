@@ -11,11 +11,11 @@ import java.util.List;
 @Mapper
 public interface WorkerMapper {
 
-    @Insert("insert into worker values (#{uid}, @{type})")
-    int insert(@Param("uid") String uid, @Param("type") int type);
+    @Insert("insert into worker values (#{uid})")
+    int insert(String uid);
 
-    @Delete("delete from worker where uid = #{uid} and type = #{type}")
-    int delete(@Param("uid") String uid, @Param("type") int type);
+    @Delete("delete from worker where uid = #{uid}")
+    int delete(String uid);
 
     @Select("select * from worker")
     List<Worker> getAll();

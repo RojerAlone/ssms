@@ -48,6 +48,5 @@ CREATE TABLE IF NOT EXISTS `ssms`.`longorder` (
 
 CREATE TABLE IF NOT EXISTS `ssms`.`worker` (
   `uid` VARCHAR(10) NOT NULL COMMENT '学工号',
-  `type` INT NOT NULL COMMENT '类型，0 表示普通工作人员，1 表示管理员',
-  PRIMARY KEY (`uid`, `type`)
+  PRIMARY KEY (`uid`)
 ) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '工作人员信息';

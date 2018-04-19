@@ -34,19 +34,4 @@ public class AdminController extends AbstractController {
         return LoginResultUtil.parseResult(CommonService.login(uid, authToken), response, 1);
     }
 
-    @PutMapping("/worker/{uid}")
-    public Result addWorker(@PathVariable("uid") String uid) {
-        return adminService.addWorker(uid);
-    }
-
-    @DeleteMapping("/worker/{uid}")
-    public Result removeWorker(@PathVariable("uid") String uid) {
-        return adminService.removeWorker(uid);
-    }
-
-    @GetMapping("/worker/all")
-    public Result getWorker(@RequestParam(value = "page", defaultValue = "1") int page,
-                            @RequestParam(value = "nums", defaultValue = "10") int nums) {
-        return Result.success(UserAccessUtil.getWorker(page, nums));
-    }
 }
