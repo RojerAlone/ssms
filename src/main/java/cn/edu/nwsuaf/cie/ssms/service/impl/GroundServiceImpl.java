@@ -104,7 +104,7 @@ public class GroundServiceImpl implements GroundService {
     @Override
     public Result getWeekGymnastics() {
         Date endDate = new Date();
-        Date startDate = DateUtils.addDays(endDate, -7);
+        Date startDate = DateUtils.addDays(endDate, 7);
         List<Order> orders = orderMapper.selectGymnasticsByDatesAndStat(Order.STAT_PAIED, startDate, endDate);
         JSONArray data = new JSONArray();
         for (Order order : orders) {

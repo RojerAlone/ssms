@@ -28,4 +28,6 @@ public class MsgCenter {
 
     public static final String NOT_SUPPORT_METHOD = "不支持的 HTTP 请求方法: %s";
 
+    public static final String ORDER_NOT_EXIST = "订单不存在";
+
 }

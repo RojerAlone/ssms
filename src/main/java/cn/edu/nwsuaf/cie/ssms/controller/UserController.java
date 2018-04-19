@@ -35,8 +35,4 @@ public class UserController extends AbstractController {
         return orderService.getSportTime();
     }
 
-    @GetMapping("cost")
-    public Result cost() {
-        return orderService.getCost();
-    }
 }

@@ -2,6 +2,8 @@ package cn.edu.nwsuaf.cie.ssms.model;
 
 public class Ground {
 
+    public static final int GYMNASTICS_ID = 13;
+
     private Integer id;
 
     private String name;

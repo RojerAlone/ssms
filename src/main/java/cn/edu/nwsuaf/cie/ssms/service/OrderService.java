@@ -24,6 +24,8 @@ public interface OrderService {
      */
     Result order(int gid, String startTime, String endTime);
 
+    Result orderAndPay(int gid, String startTime, String endTime);
+
     /**
      * 取消预订
      */
@@ -33,8 +35,6 @@ public interface OrderService {
      * 支付订单
      */
     Result pay(int orderId);
-
-    Result getCost();
 
     Result getSportTime();
 

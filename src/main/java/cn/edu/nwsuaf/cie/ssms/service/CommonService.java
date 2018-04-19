@@ -4,12 +4,10 @@ import cn.edu.nwsuaf.cie.ssms.mapper.CloseInfoMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.LongOrderMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.OrderMapper;
 import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
-import cn.edu.nwsuaf.cie.ssms.model.LongOrder;
 import cn.edu.nwsuaf.cie.ssms.model.Order;
 import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.util.CommonCache;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
-import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import cn.edu.nwsuaf.cie.ssms.util.UserAccessUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,27 +67,6 @@ public class CommonService {
                 }
             }
         }
-        // 查看是否被长期订单预订
-//        List<LongOrder> longOrders = longOrderMapper.selectByGidAndStatAndDate(gid, LongOrder.STAT_OK, startDateTime);
-//        for (LongOrder longOrder : longOrders) {
-//            if (longOrder.getWeekday() != TimeUtil.getWeekday(startDateTime)) {
-//                continue;
-//            }
-//            if (longOrder.getStartTime() == null) { // 整天都不开放
-//                return true;
-//            } else {
-//                if (longOrder.getEndTime() == null) { // 如果长期订单开始时间从开始到当天结束
-//                    if (TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) == 1) { // 如果查询的结束时间大于长订单开始时间
-//                        return true;
-//                    }
-//                } else { // 如果开始时间和结束时间都不为空
-//                    if (!(TimeUtil.compareTime(startDateTime, longOrder.getEndTime()) != -1
-//                            || TimeUtil.compareTime(endDateTime, longOrder.getStartTime()) != 1)) {
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
         return false;
     }
 

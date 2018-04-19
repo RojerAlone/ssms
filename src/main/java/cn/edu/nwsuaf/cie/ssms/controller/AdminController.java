@@ -1,6 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.controller;
 
-import cn.edu.nwsuaf.cie.ssms.service.AdminService;
+import cn.edu.nwsuaf.cie.ssms.model.Ground;
+import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.UserAccessUtil;
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.util.*;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminController extends AbstractController {
 
     @Autowired
-    private AdminService adminService;
+    private OrderService orderService;
 
     @Autowired
     private UserHolder userHolder;
@@ -32,6 +33,21 @@ public class AdminController extends AbstractController {
             return Result.error(MsgCenter.ERROR_AUTH);
         }
         return LoginResultUtil.parseResult(CommonService.login(uid, authToken), response, 1);
+    }
+
+    @PutMapping("/payment/{id}")
+    public Result payOrder(@PathVariable("id") int orderId) {
+        return orderService.pay(orderId);
+    }
+
+    @PostMapping("/gymnastics")
+    public Result orderGymnastics(@RequestParam("startTimd") String startTime, @RequestParam("endTime") String endTime) {
+        return orderService.orderAndPay(Ground.GYMNASTICS_ID, startTime, endTime);
+    }
+
+    @DeleteMapping("/gymnastics/{id}")
+    public Result deleteGymnasticsOrder(@PathVariable("id") int orderId) {
+        return orderService.cancel(orderId);
     }
 
 }

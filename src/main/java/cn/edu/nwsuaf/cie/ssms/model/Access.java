@@ -6,11 +6,10 @@ package cn.edu.nwsuaf.cie.ssms.model;
 public enum Access {
 
     /**
-     * 用户权限，分为 root、管理员、工作人员和普通用户
+     * 用户权限，分为 root、管理员和普通用户
      */
     ROOT("root"),
     ADMIN("admin"),
-    WORKER("worker"),
     NORMAL("normal");
 
     Access(String access) {

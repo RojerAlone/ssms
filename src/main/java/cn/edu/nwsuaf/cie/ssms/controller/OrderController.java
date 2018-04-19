@@ -15,12 +15,12 @@ public class OrderController extends AbstractController {
     @Autowired
     private OrderService orderService;
 
-    @PutMapping("/order")
+    @PostMapping("/order")
     public Result order(@RequestParam int gid, @RequestParam String startTime, @RequestParam String endTime) {
         return orderService.order(gid, startTime, endTime);
     }
 
-    @PostMapping("/cancel")
+    @PutMapping("/cancel")
     public Result cancel(@RequestParam int orderId) {
         return orderService.cancel(orderId);
     }
