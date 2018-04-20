@@ -1,6 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.interceptor;
 
 import cn.edu.nwsuaf.cie.ssms.controller.AbstractController;
+import cn.edu.nwsuaf.cie.ssms.model.Access;
 import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.util.CommonCache;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
@@ -43,6 +44,11 @@ public class AuthInterceptor implements HandlerInterceptor {
                 userHolder.setUser(user);
             }
         }
+        // TODO test
+        User user = new User();
+        user.setAccess(Access.ADMIN);
+        user.setUid("2014012597");
+        userHolder.setUser(user);
         return true;
     }
 

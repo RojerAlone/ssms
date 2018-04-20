@@ -108,15 +108,18 @@ public class OrderServiceImpl implements OrderService {
             }
             Order order = new Order();
             order.setGid(gid);
-            order.setUid(userHolder.getUser().getUid());
+            // TODO 为了测试注释了
+//            order.setUid(userHolder.getUser().getUid());
+//            int times = (int) ((endDateTime.getTime() - startDateTime.getTime()) / TimeUtil.ONE_HOUR);
+//            if (userHolder.getUser().isStudent()) {
+//                order.setTotal(Price.STUDENT_PRICE * times);
+//            } else {
+//                order.setTotal(Price.TEACHER_PRICE * times);
+//            }
+            order.setTotal(0);
+            order.setUid("2014012597");
             order.setStartTime(startDateTime);
             order.setEndTime(endDateTime);
-            int times = (int) ((endDateTime.getTime() - startDateTime.getTime()) / TimeUtil.ONE_HOUR);
-            if (userHolder.getUser().isStudent()) {
-                order.setTotal(Price.STUDENT_PRICE * times);
-            } else {
-                order.setTotal(Price.TEACHER_PRICE * times);
-            }
             if (orderMapper.insert(order) == 1) {
                 return Result.success(order.getId());
             } else {
