@@ -34,18 +34,6 @@ CREATE TABLE IF NOT EXISTS `ssms`.`order` (
   INDEX `time`(`start_time`, `end_time`)
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8 COMMENT '订单信息';
 
-CREATE TABLE IF NOT EXISTS `ssms`.`longorder` (
-  `id` INT NOT NULL AUTO_INCREMENT COMMENT '订单ID',
-  `gid` INT NOT NULL COMMENT '场地ID',
-  `start_date` DATE NOT NULL COMMENT '开始日期',
-  `end_date` DATE NOT NULL COMMENT '结束日期',
-  `start_time` TIME DEFAULT NULL COMMENT '开始时间，如果为空表示占用该场地一整天',
-  `end_time` TIME DEFAULT NULL COMMENT '结束时间，如果为空表示占用该场地一整天',
-  `weekday` INT NOT NULL COMMENT '每周几',
-  `stat` INT NOT NULL DEFAULT 0 COMMENT '0 表示正常，1 表示已删除',
-  PRIMARY KEY (`id`)
-) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '长期预订信息';
-
 CREATE TABLE IF NOT EXISTS `ssms`.`worker` (
   `uid` VARCHAR(10) NOT NULL COMMENT '学工号',
   PRIMARY KEY (`uid`)
