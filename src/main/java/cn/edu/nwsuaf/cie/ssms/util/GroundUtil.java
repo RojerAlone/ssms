@@ -17,6 +17,9 @@ import java.util.Map;
 @Component
 public class GroundUtil {
 
+    /**
+     * 场地 ID - 场地类型名称
+     */
     private static Map<Integer, String> groundInfo;
 
     private static GroundMapper groundMapper;

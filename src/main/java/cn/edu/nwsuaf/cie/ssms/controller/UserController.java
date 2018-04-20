@@ -32,7 +32,7 @@ public class UserController extends AbstractController {
 
     @GetMapping("sport")
     public Result sport() {
-        return orderService.getSportTime();
+        return orderService.getPersonalSportTime();
     }
 
 }

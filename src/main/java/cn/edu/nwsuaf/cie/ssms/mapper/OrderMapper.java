@@ -50,6 +50,9 @@ public interface OrderMapper {
     @Select("select * from `order` where gid = 13 and stat = #{stat} and TO_DAYS(start_time) >= TO_DAYS(#{startDate}) and TO_DAYS(start_time) <= TO_DAYS(#{endDate})")
     List<Order> selectGymnasticsByDatesAndStat(@Param("stat") int stat, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
+    @Select("select * from `order` where stat = #{stat} and TO_DAYS(start_time) >= TO_DAYS(#{startDate}) and TO_DAYS(start_time) <= TO_DAYS(#{endDate})")
+    List<Order> selectByStatAndDates(@Param("stat") int stat, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
     @Update("update `order` set stat=#{stat} where id = #{id}")
     int updateStatById(@Param("id") int id, @Param("stat") int stat);
 

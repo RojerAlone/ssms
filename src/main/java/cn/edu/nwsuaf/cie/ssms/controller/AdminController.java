@@ -50,4 +50,9 @@ public class AdminController extends AbstractController {
         return orderService.cancel(orderId);
     }
 
+    @GetMapping("/sport")
+    public Result getSport() {
+        return orderService.getAllSportTime();
+    }
+
 }

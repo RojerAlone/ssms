@@ -36,6 +36,8 @@ public interface OrderService {
      */
     Result pay(int orderId);
 
-    Result getSportTime();
+    Result getPersonalSportTime();
+
+    Result getAllSportTime();
 
 }

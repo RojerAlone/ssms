@@ -168,25 +168,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Result getSportTime() {
+    public Result getPersonalSportTime() {
         List<Order> orders = getPersonalOrder();
         if (orders.isEmpty()) {
             return Result.success();
         }
-        Map<String, Long> costInfo = new HashMap<>();
-        for (Order order : orders) {
-            String typeName = GroundUtil.getGroundTypeNameByGid(order.getGid());
-            long times = order.getEndTime().getTime() - order.getStartTime().getTime();
-            costInfo.put(typeName, costInfo.getOrDefault(typeName, 0L) + times);
+        return Result.success(parseSportTimeInfo(orders));
+    }
+
+    @Override
+    public Result getAllSportTime() {
+        Date endDate = new Date();
+        Date startDate = DateUtils.addDays(endDate, -COUNT_DAYS);
+        List<Order> orders = orderMapper.selectByStatAndDates(Order.STAT_PAIED, startDate, endDate);
+        if (orders.isEmpty()) {
+            return Result.success();
         }
-        JSONArray jsonArray = new JSONArray();
-        for (Map.Entry<String, Long> entry : costInfo.entrySet()) {
-            JSONObject json = new JSONObject();
-            json.put("type", entry.getKey());
-            json.put("value", entry.getValue() / TimeUtil.ONE_HOUR);
-            jsonArray.add(json);
-        }
-        return Result.success(jsonArray);
+        return Result.success(parseSportTimeInfo(orders));
     }
 
     /**
@@ -198,6 +196,23 @@ public class OrderServiceImpl implements OrderService {
         Date endDate = new Date();
         Date startDate = DateUtils.addDays(endDate, -COUNT_DAYS);
         return orderMapper.selectByStatAndUidAndTime(uid, stat, startDate, endDate);
+    }
+
+    private JSONArray parseSportTimeInfo(List<Order> orders) {
+        Map<String, Long> sportTime = new HashMap<>();
+        for (Order order : orders) {
+            String typeName = GroundUtil.getGroundTypeNameByGid(order.getGid());
+            long times = order.getEndTime().getTime() - order.getStartTime().getTime();
+            sportTime.put(typeName, sportTime.getOrDefault(typeName, 0L) + times);
+        }
+        JSONArray jsonArray = new JSONArray();
+        for (Map.Entry<String, Long> entry : sportTime.entrySet()) {
+            JSONObject json = new JSONObject();
+            json.put("type", entry.getKey());
+            json.put("value", entry.getValue() / TimeUtil.ONE_HOUR);
+            jsonArray.add(json);
+        }
+        return jsonArray;
     }
 
 }
