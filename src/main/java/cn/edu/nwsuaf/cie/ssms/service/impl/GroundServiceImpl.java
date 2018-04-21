@@ -77,7 +77,7 @@ public class GroundServiceImpl implements GroundService {
         for (Order order : orders) {
             int start = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getStartTime());
             int end = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getEndTime());
-            for (int i = start; i <= end; i++) {
+            for (int i = start; i < end; i++) {
                 /**
                  * 前端使用 echarts 显示某天的预订情况，返回一个 array(time, gid, stat)
                  * 渲染的时候 time 是横坐标，gid 是纵坐标，stat 是状态，不同的状态显示不同的颜色

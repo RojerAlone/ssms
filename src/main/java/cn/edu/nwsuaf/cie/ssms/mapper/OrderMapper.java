@@ -56,6 +56,9 @@ public interface OrderMapper {
     @Update("update `order` set stat=#{stat} where id = #{id}")
     int updateStatById(@Param("id") int id, @Param("stat") int stat);
 
+    @Update("update `order` set stat = #{newStat} where stat = #{originalStat} and ctime <= #{date}")
+    int updateStatByStatAndDate(@Param("newStat") int newStat, @Param("originalStat") int originalStat, @Param("date") Date date);
+
     @UpdateProvider(type = SQLBuilder.class, method = "buildUpdate")
     int updateByPrimaryKeySelective(Order order);
 

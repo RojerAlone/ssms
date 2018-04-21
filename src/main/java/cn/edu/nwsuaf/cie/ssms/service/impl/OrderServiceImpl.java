@@ -14,6 +14,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -53,15 +54,6 @@ public class OrderServiceImpl implements OrderService {
             return Result.errorParam();
         }
         return Result.success(order);
-    }
-
-    @Override
-    public Result getMyOrders(int page, int nums) {
-        if (nums <= 0) {
-            LOGGER.warn("getMyOrders - error param : nums {}", nums);
-            return Result.errorParam();
-        }
-        return Result.success(orderMapper.selectByUid(userHolder.getUser().getUid(), nums));
     }
 
     @Override
@@ -216,6 +208,12 @@ public class OrderServiceImpl implements OrderService {
             jsonArray.add(json);
         }
         return jsonArray;
+    }
+
+    @Scheduled(fixedRate = 1000 * 60)
+    private void cleanNotPaiedOrders() {
+        Date date = DateUtils.addDays(new Date(), -1);
+        orderMapper.updateStatByStatAndDate(Order.STAT_CANCEL, Order.STAT_NOT_PAY, date);
     }
 
 }
