@@ -49,7 +49,7 @@ public class GroundServiceImpl implements GroundService {
             LOGGER.error("error time format", e);
             return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
         }
-        if (!TimeUtil.checkTime(startDateTime.getTime(), endDateTime.getTime()) || (grounds = groundMapper.selectByType(type)).isEmpty()) {
+        if (!TimeUtil.checkTime(startDateTime, endDateTime) || (grounds = groundMapper.selectByType(type)).isEmpty()) {
             LOGGER.warn("getEmptyGround - error param : type {}, startTime {}, endTime {}", type, startTime, endTime);
             return Result.errorParam();
         }
@@ -86,15 +86,9 @@ public class GroundServiceImpl implements GroundService {
             }
         }
         JSONObject json = new JSONObject();
-        String startTime = null;
-        String endTime = null;
-        if (TimeUtil.isSummer(date)){
-            startTime =  TimeUtil.SUMMER_START_TIME;
-            endTime = TimeUtil.SUMMER_END_TIME;
-        } else {
-            startTime = TimeUtil.WINTER_START_TIME;
-            endTime = TimeUtil.WINTER_END_TIME;
-        }
+        String[] openTime = TimeUtil.getOpenTime(date);
+        String startTime = openTime[0];
+        String endTime = openTime[1];
         json.put("startTime", startTime);
         json.put("endTime", endTime);
         json.put("data", data);

@@ -14,12 +14,12 @@ public class Price {
     public static int TEACHER_PRICE;
 
     @Value("${properties.price.student}")
-    public void setStudentPrice(int studentPrice) {
+    private void setStudentPrice(int studentPrice) {
         STUDENT_PRICE = studentPrice;
     }
 
     @Value("${properties.price.teacher}")
-    public void setTeacherPrice(int teacherPrice) {
+    private void setTeacherPrice(int teacherPrice) {
         TEACHER_PRICE = teacherPrice;
     }
 }

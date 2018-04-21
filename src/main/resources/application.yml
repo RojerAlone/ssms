@@ -29,3 +29,6 @@ properties:
     winter:
       start: '16:00'
       end: '21:30'
+    holiday:
+      start: '15:00'
+      end: '22:00'

@@ -17,12 +17,12 @@ public class RootAuthUtil {
     private static String PSWD;
 
     @Value("${root.username}")
-    public void setUSERNAME(String USERNAME) {
+    private void setUSERNAME(String USERNAME) {
         this.USERNAME = USERNAME;
     }
 
     @Value("${root.pswd}")
-    public void setPSWD(String PSWD) {
+    private void setPSWD(String PSWD) {
         this.PSWD = PSWD;
     }
 

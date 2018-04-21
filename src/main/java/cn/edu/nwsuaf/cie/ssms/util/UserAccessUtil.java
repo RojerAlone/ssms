@@ -24,7 +24,7 @@ public class UserAccessUtil {
     private static final Set<String> ADMINS = new HashSet<>();
 
     @Value("${root.username}")
-    public void setROOT(String root) {
+    private void setROOT(String root) {
         ROOT = root;
     }
 

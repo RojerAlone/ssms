@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.error("error time format", e);
             return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
         }
-        if (groundMapper.selectByPrimaryKey(gid) == null || !TimeUtil.checkTime(startDateTime.getTime(), endDateTime.getTime())) {
+        if (groundMapper.selectByPrimaryKey(gid) == null || !TimeUtil.checkTime(startDateTime, endDateTime)) {
             LOGGER.warn("order - error param : gid {}, startTime {}, endTime {}", gid, startTime, endTime);
             return Result.errorParam();
         }
@@ -164,10 +164,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Result getPersonalSportTime() {
-        List<Order> orders = getPersonalOrder();
-        if (orders.isEmpty()) {
-            return Result.success();
-        }
+        String uid = userHolder.getUser().getUid();
+        Date endDate = new Date();
+        Date startDate = DateUtils.addDays(endDate, -COUNT_DAYS);
+        List<Order> orders = orderMapper.selectByStatAndUidAndTime(uid, Order.STAT_PAIED, startDate, endDate);
         return Result.success(parseSportTimeInfo(orders));
     }
 
@@ -176,35 +176,24 @@ public class OrderServiceImpl implements OrderService {
         Date endDate = new Date();
         Date startDate = DateUtils.addDays(endDate, -COUNT_DAYS);
         List<Order> orders = orderMapper.selectByStatAndDates(Order.STAT_PAIED, startDate, endDate);
-        if (orders.isEmpty()) {
-            return Result.success();
-        }
         return Result.success(parseSportTimeInfo(orders));
     }
 
-    /**
-     * 获取用户最近 COUNT_DAY 的订单
-     */
-    private List<Order> getPersonalOrder() {
-        String uid = userHolder.getUser().getUid();
-        int stat = Order.STAT_PAIED;
-        Date endDate = new Date();
-        Date startDate = DateUtils.addDays(endDate, -COUNT_DAYS);
-        return orderMapper.selectByStatAndUidAndTime(uid, stat, startDate, endDate);
-    }
-
     private JSONArray parseSportTimeInfo(List<Order> orders) {
-        Map<String, Long> sportTime = new HashMap<>();
+        // 格式为 日期-时长
+        Map<String, Long> sportTime = new HashMap<>(COUNT_DAYS);
         for (Order order : orders) {
             String typeName = GroundUtil.getGroundTypeNameByGid(order.getGid());
             long times = order.getEndTime().getTime() - order.getStartTime().getTime();
-            sportTime.put(typeName, sportTime.getOrDefault(typeName, 0L) + times);
+            sportTime.put(TimeUtil.formatDate(order.getStartTime()), sportTime.getOrDefault(typeName, 0L) + times);
         }
         JSONArray jsonArray = new JSONArray();
-        for (Map.Entry<String, Long> entry : sportTime.entrySet()) {
+        Date now = new Date();
+        for (int day = 0; day < COUNT_DAYS; day++) {
             JSONObject json = new JSONObject();
-            json.put("type", entry.getKey());
-            json.put("value", entry.getValue() / TimeUtil.ONE_HOUR);
+            String date = TimeUtil.formatDate(DateUtils.addDays(now, -day));
+            json.put("date", date);
+            json.put("value", sportTime.getOrDefault(date, 0L) / TimeUtil.ONE_HOUR);
             jsonArray.add(json);
         }
         return jsonArray;

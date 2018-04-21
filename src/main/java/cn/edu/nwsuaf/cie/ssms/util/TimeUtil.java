@@ -20,9 +20,9 @@ public class TimeUtil {
 
     public static final long ONE_HOUR = 1000 * 60 * 60;
 
-    public static final long HALF_HOUR = ONE_HOUR / 2;
+    private static final long HALF_HOUR = ONE_HOUR / 2;
 
-    public static final long ONE_DAY = ONE_HOUR * 24;
+    static final long ONE_DAY = ONE_HOUR * 24;
 
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -32,39 +32,79 @@ public class TimeUtil {
 
     private static final Calendar CALENDAR = Calendar.getInstance();
 
-    public static String SUMMER_START_TIME;
+    private static String SUMMER_START_TIME;
 
-    public static String SUMMER_END_TIME;
+    private static String SUMMER_END_TIME;
 
-    public static String WINTER_START_TIME;
+    private static String WINTER_START_TIME;
 
-    public static String WINTER_END_TIME;
+    private static String WINTER_END_TIME;
+
+    private static String HOLIDAY_START_TIME;
+
+    private static String HOLIDAY_END_TIME;
 
     @Value("${properties.time.summer.start}")
-    public void setSummerStartTime(String summerStartTime) {
+    private void setSummerStartTime(String summerStartTime) {
         SUMMER_START_TIME = summerStartTime;
     }
 
     @Value("${properties.time.summer.end}")
-    public void setSummerEndTime(String summerEndTime) {
+    private void setSummerEndTime(String summerEndTime) {
         SUMMER_END_TIME = summerEndTime;
     }
 
     @Value("${properties.time.winter.start}")
-    public void setWinterStartTime(String winterStartTime) {
+    private void setWinterStartTime(String winterStartTime) {
         WINTER_START_TIME = winterStartTime;
     }
 
     @Value("${properties.time.winter.end}")
-    public void setWinterEndTime(String winterEndTime) {
+    private void setWinterEndTime(String winterEndTime) {
         WINTER_END_TIME = winterEndTime;
+    }
+
+    @Value("${properties.time.holiday.start}")
+    private void setHolidayStartTime(String holidayStartTime) {
+        HOLIDAY_START_TIME = holidayStartTime;
+    }
+
+    @Value("${properties.time.holiday.end}")
+    private void setHolidayEndTime(String holidayEndTime) {
+        HOLIDAY_END_TIME = holidayEndTime;
     }
 
     /**
      * 检测时间是否合法（开始时间在结束时间之前同时时间差是整时的）
      */
-    public static boolean checkTime(long startTime, long endTime) {
-        return startTime < endTime && (endTime - startTime) % TimeUtil.HALF_HOUR == 0;
+    public static boolean checkTime(Date startTime, Date endTime) {
+        // 判断是否是以前的日期
+        if (startTime.before(new Date())) {
+            return false;
+        }
+        long start = startTime.getTime();
+        long end = endTime.getTime();
+        // 判断时间间隔是否是半个小时为单位的
+        if (start >= end || (end - start) % TimeUtil.HALF_HOUR != 0) {
+            return false;
+        }
+        String[] startTimeStr = formatDateTime(startTime).split(" ");
+        String[] endTimeStr = formatDateTime(endTime).split(" ");
+        // 判断是否是同一天
+        if (!startTimeStr[0].equals(endTimeStr[0])) {
+            return false;
+        }
+        // 判断是否在开馆时间内
+        String[] openTimeInfo = getOpenTime(startTime);
+        try {
+            if (parseTime(startTimeStr[1]).before(parseTime(openTimeInfo[0]))
+                    || parseTime(endTimeStr[1]).after(parseTime(openTimeInfo[1]))) {
+                return false;
+            }
+        } catch (ParseException e) {
+            LOGGER.error("parse time error", e);
+        }
+        return true;
     }
 
     /**
@@ -108,8 +148,6 @@ public class TimeUtil {
 
     /**
      * 获取日期是星期几
-     * @param date
-     * @return
      */
     public static int getWeekday(Date date) {
         synchronized (CALENDAR) {
@@ -119,11 +157,18 @@ public class TimeUtil {
     }
 
     /**
-     * 判断某天是否是夏季作息时间
+     * 获取某天的场馆开放日期，返回一个字符串数组，第一个表示开馆时间，第二个表示闭馆时间
      */
-    public static boolean isSummer(Date date) {
-        int month = Integer.valueOf(DATE_FORMATTER.format(date).substring(5, 7));
-        return 5 <= month && month < 10;
+    public static String[] getOpenTime(Date date) {
+        // 如果是周末，返回节假日时间
+        if (getWeekday(date) > 5) {
+            return new String[]{HOLIDAY_START_TIME, HOLIDAY_END_TIME};
+        }
+        int month = Integer.valueOf(formatDate(date).substring(5, 7));
+        if (5 <= month && month < 10) {
+            return new String[]{SUMMER_START_TIME, SUMMER_END_TIME};
+        }
+        return new String[]{WINTER_START_TIME, WINTER_END_TIME};
     }
 
     /**
@@ -138,24 +183,16 @@ public class TimeUtil {
      * 如果数据不合法（不以整小时或者半小时为单位、在开馆时间之前），返回 -1
      */
     public static int getNumOfHalfHourDistanceStartTime(Date date) {
-        String timeStr = TIME_FORMATTER.format(date);
+        String timeStr = formatTime(date);
         String[] tmp = timeStr.split(":");
         int hour1 = Integer.valueOf(tmp[0]);
         int minute1 = Integer.valueOf(tmp[1]);
         if (minute1 != 0 && minute1 != 30) {
             return -1;
         }
-        int hour2;
-        int minute2;
-        if (isSummer(date)) {
-            tmp = SUMMER_START_TIME.split(":");
-            hour2 = Integer.valueOf(tmp[0]);
-            minute2 = Integer.valueOf(tmp[1]);
-        } else {
-            tmp = WINTER_START_TIME.split(":");
-            hour2 = Integer.valueOf(tmp[0]);
-            minute2 = Integer.valueOf(tmp[1]);
-        }
+        tmp = getOpenTime(date)[0].split(":");
+        int hour2 = Integer.valueOf(tmp[0]);
+        int minute2 = Integer.valueOf(tmp[1]);
         if (hour1 < hour2) {
             return -1;
         }
@@ -167,8 +204,8 @@ public class TimeUtil {
      * 不能直接用 getTime / 3600 / 1000 / 24 来比较，这里略去 时分秒 之后再进行比较
      */
     public static int distanceDays(Date date1, Date date2) throws ParseException {
-        long time1 = DATETIME_FORMATTER.parse(DATE_FORMATTER.format(date1)).getTime();
-        long time2 = DATETIME_FORMATTER.parse(DATE_FORMATTER.format(date2)).getTime();
+        long time1 = parseDateTime(formatDate(date1)).getTime();
+        long time2 = parseDateTime(formatDate(date2)).getTime();
         return (int) ((time2 - time1) / (ONE_HOUR * 24));
     }
 
