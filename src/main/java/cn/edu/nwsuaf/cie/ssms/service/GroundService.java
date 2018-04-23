@@ -13,6 +13,6 @@ public interface GroundService {
 
     Result getBadmintonInfo(String dateStr);
 
-    Result getWeekGymnastics();
+    Result getGymnasticsInfo();
 
 }

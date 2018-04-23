@@ -36,4 +36,17 @@ public class CommonTest {
         }
     }
 
+    @Test
+    public void addTestDataOfGymnasticsToday() throws Exception {
+        int gid = 13;
+        String date = TimeUtil.formatDate(new Date());
+        String startTime = date + " 16:30";
+        String endTime = date + " 18:30";
+        if (!orderService.orderAndPay(gid, startTime, endTime).isSuccess()) {
+            System.out.println("插入数据失败");
+        } else {
+            System.out.println("插入成功");
+        }
+    }
+
 }

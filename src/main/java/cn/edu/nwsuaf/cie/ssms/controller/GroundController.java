@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-
 /**
  * Created by zhangrenjie on 2017-12-07
  */
@@ -32,7 +30,7 @@ public class GroundController extends AbstractController {
 
     @GetMapping("/gymnastics")
     public Result getGymnasticsInfo() {
-        return groundService.getWeekGymnastics();
+        return groundService.getGymnasticsInfo();
     }
 
 }

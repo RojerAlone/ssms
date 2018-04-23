@@ -88,8 +88,11 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.error("error time format", e);
             return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
         }
-        if (groundMapper.selectByPrimaryKey(gid) == null || !TimeUtil.checkTime(startDateTime, endDateTime)) {
-            LOGGER.warn("order - error param : gid {}, startTime {}, endTime {}", gid, startTime, endTime);
+        if (!TimeUtil.checkTime(startDateTime, endDateTime)) {
+            return Result.error(MsgCenter.ERROR_TIME);
+        }
+        if (groundMapper.selectByPrimaryKey(gid) == null) {
+            LOGGER.warn("order - error param : gid {}", gid);
             return Result.errorParam();
         }
         try {

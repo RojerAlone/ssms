@@ -49,8 +49,11 @@ public class GroundServiceImpl implements GroundService {
             LOGGER.error("error time format", e);
             return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
         }
-        if (!TimeUtil.checkTime(startDateTime, endDateTime) || (grounds = groundMapper.selectByType(type)).isEmpty()) {
-            LOGGER.warn("getEmptyGround - error param : type {}, startTime {}, endTime {}", type, startTime, endTime);
+        if (!TimeUtil.checkTime(startDateTime, endDateTime)) {
+            return Result.error(MsgCenter.ERROR_TIME);
+        }
+        if ((grounds = groundMapper.selectByType(type)).isEmpty()) {
+            LOGGER.warn("getEmptyGround - type {}", type);
             return Result.errorParam();
         }
         for (Ground ground : grounds) {
@@ -87,6 +90,7 @@ public class GroundServiceImpl implements GroundService {
         }
         JSONObject json = new JSONObject();
         String[] openTime = TimeUtil.getOpenTime(date);
+//        String[] openTime = new String[]{"15:00", "22:00"};
         String startTime = openTime[0];
         String endTime = openTime[1];
         json.put("startTime", startTime);
@@ -96,16 +100,16 @@ public class GroundServiceImpl implements GroundService {
     }
 
     @Override
-    public Result getWeekGymnastics() {
-        Date endDate = new Date();
-        Date startDate = DateUtils.addDays(endDate, 7);
+    public Result getGymnasticsInfo() {
+        Date startDate = new Date();
+        Date endDate = DateUtils.addDays(startDate, 12);
         List<Order> orders = orderMapper.selectGymnasticsByDatesAndStat(Order.STAT_PAIED, startDate, endDate);
         JSONArray data = new JSONArray();
         for (Order order : orders) {
             try {
                 int start = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getStartTime());
                 int end = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getEndTime());
-                for (int i = start; i <= end; i++) {
+                for (int i = start; i < end; i++) {
                     int distanceDays = TimeUtil.distanceDays(order.getStartTime(), startDate);
                     data.add(new int[]{i, distanceDays, order.getStat()});
                 }
@@ -116,6 +120,9 @@ public class GroundServiceImpl implements GroundService {
         }
         JSONObject json = new JSONObject();
         json.put("data", data);
+        // TODO 没有确定体操室的开始和结束时间
+        json.put("startTime", "10:00");
+        json.put("endTime", "22:00");
         return Result.success(json);
     }
 }
