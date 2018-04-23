@@ -19,7 +19,7 @@ public interface MessageMapper {
     @Select("select * from `message` where id = #{id}")
     Message selectById(int id);
 
-    @Select("select * from `message` where stat = #{stat} limit #{startPos}, #{size}")
+    @Select("select * from `message` where stat = #{stat} order by id desc limit #{startPos}, #{size}")
     List<Message> selectByStatAndPage(@Param("stat") int stat, @Param("startPos") int startPos, @Param("size") int size);
 
     @Update("update `message` set stat = #{stat} where id = #{id}")
