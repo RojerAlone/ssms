@@ -1,6 +1,7 @@
 package cn.edu.nwsuaf.cie.ssms.controller;
 
 import cn.edu.nwsuaf.cie.ssms.model.Ground;
+import cn.edu.nwsuaf.cie.ssms.service.MessageService;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.UserAccessUtil;
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
@@ -20,6 +21,9 @@ public class AdminController extends AbstractController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private MessageService messageService;
 
     @Autowired
     private UserHolder userHolder;
@@ -53,6 +57,16 @@ public class AdminController extends AbstractController {
     @GetMapping("/sport")
     public Result getSport() {
         return orderService.getAllSportTime();
+    }
+
+    @PostMapping("/message")
+    public Result addMessage(@RequestParam(value = "title", required = false) String title, @RequestParam("content") String content) {
+        return messageService.addMessage(title, content);
+    }
+
+    @DeleteMapping("/message/{id}")
+    public Result deleteMessage(@PathVariable("id") int id) {
+        return messageService.deleteMessage(id);
     }
 
 }

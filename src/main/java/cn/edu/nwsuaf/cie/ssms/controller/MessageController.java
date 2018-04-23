@@ -15,16 +15,6 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @PostMapping("message")
-    public Result addMessage(@RequestParam(value = "title", required = false) String title, @RequestParam("content") String content) {
-        return messageService.addMessage(title, content);
-    }
-
-    @DeleteMapping("{id}")
-    public Result deleteMessage(@PathVariable("id") int id) {
-        return messageService.deleteMessage(id);
-    }
-
     @GetMapping("{id}")
     public Result getMessage(@PathVariable("id") int id) {
         return messageService.getMessageById(id);
