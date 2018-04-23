@@ -32,7 +32,7 @@ public interface OrderMapper {
     @Select("select * from `order` where uid = #{uid} limit #{nums}")
     List<Order> selectByUid(@Param("uid") String uid, @Param("nums") int nums);
 
-    @Select("select * from `order` where uid = #{uid} and stat = #{stat} limit #{nums}")
+    @Select("select * from `order` where uid = #{uid} and stat = #{stat} limit #{page}, #{nums}")
     List<Order> selectByUidAndStat(@Param("uid") String uid, @Param("stat") int stat,
                                    @Param("page") int page, @Param("nums") int nums);
 
