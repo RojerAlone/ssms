@@ -107,12 +107,9 @@ public class GroundServiceImpl implements GroundService {
         JSONArray data = new JSONArray();
         for (Order order : orders) {
             try {
-                int start = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getStartTime());
-                int end = TimeUtil.getNumOfHalfHourDistanceStartTime(order.getEndTime());
-                for (int i = start; i < end; i++) {
-                    int distanceDays = TimeUtil.distanceDays(order.getStartTime(), startDate);
-                    data.add(new int[]{i, distanceDays, order.getStat()});
-                }
+                int time = TimeUtil.formatTime(order.getStartTime()).equals(Ground.GYMNASTICS_REST_TIME) ? 0 : 1;
+                int distanceDays = TimeUtil.distanceDays(order.getStartTime(), startDate);
+                data.add(new int[]{time, distanceDays, order.getStat()});
             } catch (ParseException e) {
                 LOGGER.error("time parse error", e);
                 return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
@@ -120,9 +117,6 @@ public class GroundServiceImpl implements GroundService {
         }
         JSONObject json = new JSONObject();
         json.put("data", data);
-        // TODO 没有确定体操室的开始和结束时间
-        json.put("startTime", "10:00");
-        json.put("endTime", "22:00");
         return Result.success(json);
     }
 }

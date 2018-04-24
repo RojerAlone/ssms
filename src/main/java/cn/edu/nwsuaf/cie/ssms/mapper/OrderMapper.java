@@ -15,6 +15,11 @@ public interface OrderMapper {
     @Options(useGeneratedKeys = true, keyProperty = "order.id")
     int insert(@Param("order") Order order);
 
+    @Insert("insert into `order`(uid, gid, start_time, end_time, total, stat) values (#{order.uid}, #{order.gid}, " +
+            "#{order.startTime}, #{order.endTime}, #{order.total}, #{order.stat})")
+    @Options(useGeneratedKeys = true, keyProperty = "order.id")
+    int insertWithStat(@Param("order") Order order);
+
     @Select("select * from `order` where id = #{id}")
     Order selectByPrimaryKey(Integer id);
 

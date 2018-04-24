@@ -45,8 +45,8 @@ public class AdminController extends AbstractController {
     }
 
     @PostMapping("/gymnastics")
-    public Result orderGymnastics(@RequestParam("startTimd") String startTime, @RequestParam("endTime") String endTime) {
-        return orderService.orderAndPay(Ground.GYMNASTICS_ID, startTime, endTime);
+    public Result orderGymnastics(@RequestParam String date, @RequestParam int time) {
+        return orderService.orderGymnastics(date, time);
     }
 
     @DeleteMapping("/gymnastics/{id}")

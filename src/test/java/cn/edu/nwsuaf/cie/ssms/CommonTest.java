@@ -1,7 +1,11 @@
 package cn.edu.nwsuaf.cie.ssms;
 
+import cn.edu.nwsuaf.cie.ssms.model.Access;
+import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
+import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,16 @@ public class CommonTest {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserHolder userHolder;
+
+    @Before
+    public void before() {
+        User user = new User();
+        user.setUid("2014012597");
+        user.setAccess(Access.ADMIN);
+        userHolder.setUser(user);
+    }
 
     @Test
     public void addTestDataOfOrderToday() throws Exception {
@@ -40,9 +54,7 @@ public class CommonTest {
     public void addTestDataOfGymnasticsToday() throws Exception {
         int gid = 13;
         String date = TimeUtil.formatDate(new Date());
-        String startTime = date + " 16:30";
-        String endTime = date + " 18:30";
-        if (!orderService.orderAndPay(gid, startTime, endTime).isSuccess()) {
+        if (!orderService.orderGymnastics(date, 1).isSuccess()) {
             System.out.println("插入数据失败");
         } else {
             System.out.println("插入成功");

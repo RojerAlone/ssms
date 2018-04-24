@@ -23,6 +23,14 @@ public interface OrderService {
     Result orderAndPay(int gid, String startTime, String endTime);
 
     /**
+     * 预订健美操室
+     *
+     * @param date 预订的日期，格式为 yyyy-MM-dd
+     * @param time 课余时间还是晚自习，0 表示课余时间，1 表示晚自习
+     */
+    Result orderGymnastics(String date, int time);
+
+    /**
      * 取消预订
      */
     Result cancel(int orderId);

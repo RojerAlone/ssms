@@ -11,6 +11,9 @@ public class CrossOriginConfiguration extends WebMvcConfigurerAdapter {
         registry.addMapping("/**")
                 .allowedHeaders("*")
                 .allowedMethods("*")
-                .allowedOrigins("*");
+//                .allowCredentials(true)
+//                .allowedOrigins("172.19.12.35")
+                .allowedOrigins("*")
+                ;
     }
 }

@@ -4,6 +4,7 @@ import cn.edu.nwsuaf.cie.ssms.config.Price;
 import cn.edu.nwsuaf.cie.ssms.mapper.GroundMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.OrderMapper;
 import cn.edu.nwsuaf.cie.ssms.model.Access;
+import cn.edu.nwsuaf.cie.ssms.model.Ground;
 import cn.edu.nwsuaf.cie.ssms.model.Order;
 import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
@@ -79,62 +80,52 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Result order(int gid, String startTime, String endTime) {
-        Date startDateTime = null;
-        Date endDateTime = null;
-        try {
-            startDateTime = TimeUtil.parseDateTime(startTime);
-            endDateTime = TimeUtil.parseDateTime(endTime);
-        } catch (ParseException e) {
-            LOGGER.error("error time format", e);
-            return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
-        }
-        if (!TimeUtil.checkTime(startDateTime, endDateTime)) {
-            return Result.error(MsgCenter.ERROR_TIME);
-        }
-        if (groundMapper.selectByPrimaryKey(gid) == null) {
-            LOGGER.warn("order - error param : gid {}", gid);
-            return Result.errorParam();
-        }
-        try {
-            lock.lock();
-            if (orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(gid, startDateTime, endDateTime, Order.STAT_CANCEL) > 0
-                    || CommonService.isUsed(gid, startDateTime, endDateTime)) {
-                return Result.error(MsgCenter.GROUND_ORDERED);
-            }
-            Order order = new Order();
-            order.setGid(gid);
-            // TODO 为了测试注释了
-//            order.setUid(userHolder.getUser().getUid());
-//            int times = (int) ((endDateTime.getTime() - startDateTime.getTime()) / TimeUtil.ONE_HOUR);
-//            if (userHolder.getUser().isStudent()) {
-//                order.setTotal(Price.STUDENT_PRICE * times);
-//            } else {
-//                order.setTotal(Price.TEACHER_PRICE * times);
-//            }
-            order.setTotal(0);
-            order.setUid("2014012597");
-            order.setStartTime(startDateTime);
-            order.setEndTime(endDateTime);
-            if (orderMapper.insert(order) == 1) {
-                return Result.success(order.getId());
-            } else {
-                return Result.innerError();
-            }
-        } finally {
-            lock.unlock();
-        }
+        return orderWithStat(gid, startTime, endTime, Order.STAT_NOT_PAY);
     }
 
-    /**
-     * 直接预订场地，使用了 order 和 pay 方法，有很小的几率存在问题（这个事务没有执行成功），暂不考虑
-     */
     @Override
     public Result orderAndPay(int gid, String startTime, String endTime) {
-        Result result = order(gid, startTime, endTime);
-        if (!result.isSuccess()) {
-            return result;
+        return orderWithStat(gid, startTime, endTime, Order.STAT_PAIED);
+    }
+
+    @Override
+    public Result orderGymnastics(String date, int time) {
+        Date tmpDate;
+        try {
+            tmpDate = TimeUtil.parseDate(date);
+            if (TimeUtil.distanceDays(new Date(), tmpDate) < 0) {
+                return Result.error(MsgCenter.ERROR_TIME);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("parse date error", e);
+            return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, date));
         }
-        return pay((Integer) result.getResult());
+        Order order = new Order();
+        order.setUid(userHolder.getUser().getUid());
+        order.setGid(Ground.GYMNASTICS_ID);
+        if (time == 0) {
+            date += " " + Ground.GYMNASTICS_REST_TIME;
+        } else {
+            date += " " + Ground.GYMNASTICS_NIGHT_TIME;
+        }
+        try {
+            tmpDate = TimeUtil.parseDateTime(date);
+        } catch (ParseException e) {
+            LOGGER.error("orderGymnastics - inner error", e);
+            return Result.innerError();
+        }
+        if (CommonService.isUsed(Ground.GYMNASTICS_ID, tmpDate, tmpDate)) {
+            return Result.error(MsgCenter.GROUND_ORDERED);
+        }
+        order.setStartTime(tmpDate);
+        order.setEndTime(tmpDate);
+        order.setStat(Order.STAT_PAIED);
+        order.setTotal(0);
+        int res = orderMapper.insertWithStat(order);
+        if (res == 0) {
+            return Result.innerError();
+        }
+        return Result.success(order.getId());
     }
 
     @Override
@@ -200,6 +191,51 @@ public class OrderServiceImpl implements OrderService {
             jsonArray.add(json);
         }
         return jsonArray;
+    }
+
+    private Result orderWithStat(int gid, String startTime, String endTime, int stat) {
+        Date startDateTime = null;
+        Date endDateTime = null;
+        try {
+            startDateTime = TimeUtil.parseDateTime(startTime);
+            endDateTime = TimeUtil.parseDateTime(endTime);
+        } catch (ParseException e) {
+            LOGGER.error("error time format", e);
+            return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
+        }
+        if (!TimeUtil.checkTime(startDateTime, endDateTime)) {
+            return Result.error(MsgCenter.ERROR_TIME);
+        }
+        if (groundMapper.selectByPrimaryKey(gid) == null) {
+            LOGGER.warn("order - error param : gid {}", gid);
+            return Result.errorParam();
+        }
+        try {
+            lock.lock();
+            if (orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(gid, startDateTime, endDateTime, Order.STAT_CANCEL) > 0
+                    || CommonService.isUsed(gid, startDateTime, endDateTime)) {
+                return Result.error(MsgCenter.GROUND_ORDERED);
+            }
+            Order order = new Order();
+            order.setGid(gid);
+            order.setUid(userHolder.getUser().getUid());
+            order.setStat(stat);
+            int times = (int) ((endDateTime.getTime() - startDateTime.getTime()) / TimeUtil.ONE_HOUR);
+            if (userHolder.getUser().isStudent()) {
+                order.setTotal(Price.STUDENT_PRICE * times);
+            } else {
+                order.setTotal(Price.TEACHER_PRICE * times);
+            }
+            order.setStartTime(startDateTime);
+            order.setEndTime(endDateTime);
+            if (orderMapper.insert(order) == 1) {
+                return Result.success(order.getId());
+            } else {
+                return Result.innerError();
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Scheduled(fixedRate = 1000 * 60)
