@@ -202,8 +202,8 @@ root 用户登录
 管理员预订体操室
 | 参数 | 类型 | 必需 | 含义 |
 | :--- | :--- | :--- | :--- |
-| startTime | string | true | 开始时间 |
-| endTime | string | true | 结束时间 |
+| date | string | true | 预订日期，格式为 yyyy-MM-dd |
+| time | int | true | 预订时间段，0 为课余时间，1 为晚自习时间 |
 
 #### /admin/gymnastics/{id} DELETE
 管理员取消体操室订单
