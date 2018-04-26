@@ -11,6 +11,12 @@ public interface OrderService {
 
     Result getNotPaiedOrders(int page, int nums);
 
+    Result getAllNotPaidOrders(int page, int nums);
+
+    Result getAllPaidOrders(int page, int nums);
+
+    Result searchByUid(String uid, int page, int nums);
+
     Result getPaiedOrders(int page, int nums);
 
     Result getCanceledOrders(int page, int nums);

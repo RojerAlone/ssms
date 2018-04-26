@@ -69,4 +69,22 @@ public class AdminController extends AbstractController {
         return messageService.deleteMessage(id);
     }
 
+    @GetMapping("/order/notpaid")
+    public Result getAllNotPaidOrders(@RequestParam(value = "page", defaultValue = "1") int page,
+                                  @RequestParam(value = "nums", defaultValue = "10") int nums) {
+        return orderService.getAllNotPaidOrders(page, nums);
+    }
+
+    @GetMapping("/order/paid")
+    public Result getAllPaidOrders(@RequestParam(value = "page", defaultValue = "1") int page,
+                                   @RequestParam(value = "nums", defaultValue = "10") int nums) {
+        return orderService.getAllPaidOrders(page, nums);
+    }
+
+    @GetMapping("/order/search")
+    public Result searchOrdersByUid(@RequestParam String uid,
+                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                   @RequestParam(value = "nums", defaultValue = "10") int nums) {
+        return orderService.searchByUid(uid, page, nums);
+    }
 }

@@ -31,12 +31,12 @@ public interface MessageMapper {
                 {
                     INSERT_INTO("message");
                     if (message.getUid() != null) {
-                        VALUES("uid", message.getUid());
+                        VALUES("uid", "#{uid}");
                     }
                     if (message.getTitle() != null) {
-                        VALUES("title", message.getTitle());
+                        VALUES("title", "#{title}");
                     }
-                    VALUES("content", message.getContent());
+                    VALUES("content", "#{content}");
                 }
             }.toString();
         }

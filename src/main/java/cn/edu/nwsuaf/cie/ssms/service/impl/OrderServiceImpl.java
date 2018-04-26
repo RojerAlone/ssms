@@ -65,6 +65,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Result getAllNotPaidOrders(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return Result.success(orderMapper.selectByStat(Order.STAT_NOT_PAY, pageInfo[0], pageInfo[1]));
+    }
+
+    @Override
+    public Result getAllPaidOrders(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return Result.success(orderMapper.selectByStat(Order.STAT_PAIED, pageInfo[0], pageInfo[1]));
+    }
+
+    @Override
+    public Result searchByUid(String uid, int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        return Result.success(orderMapper.selectByUidAndStat(uid, Order.STAT_NOT_PAY, pageInfo[0], pageInfo[1]));
+    }
+
+    @Override
     public Result getPaiedOrders(int page, int nums) {
         int[] pageInfo = PageUtil.getPage(page, nums);
         return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_PAIED,

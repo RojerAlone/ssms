@@ -37,13 +37,16 @@ public interface OrderMapper {
     @Select("select * from `order` where uid = #{uid} limit #{nums}")
     List<Order> selectByUid(@Param("uid") String uid, @Param("nums") int nums);
 
-    @Select("select * from `order` where uid = #{uid} and stat = #{stat} limit #{page}, #{nums}")
+    @Select("select * from `order` where uid = #{uid} and stat = #{stat} order by ctime desc limit #{page}, #{nums}")
     List<Order> selectByUidAndStat(@Param("uid") String uid, @Param("stat") int stat,
                                    @Param("page") int page, @Param("nums") int nums);
 
     @Select("select * from `order` where uid = #{uid} and stat = #{stat} and (`start_time` between #{startDate} and #{endDate})")
     List<Order> selectByStatAndUidAndTime(@Param("uid") String uid, @Param("stat") int stat,
                                           @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    @Select("select * from `order` where stat = #{stat} order by start_time desc limit #{page}, #{nums}")
+    List<Order> selectByStat(@Param("stat") int stat, @Param("page") int page, @Param("nums") int nums);
 
     /**
      * 使用 TO_DAYS() 函数来获取从公元0年到指定日期经过的天数，从而确定是不是同一天
