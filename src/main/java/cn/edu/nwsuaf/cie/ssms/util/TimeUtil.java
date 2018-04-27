@@ -161,7 +161,8 @@ public class TimeUtil {
      */
     public static String[] getOpenTime(Date date) {
         // 如果是周末，返回节假日时间
-        if (getWeekday(date) > 5) {
+        int weekday = getWeekday(date);
+        if (weekday == Calendar.SATURDAY || weekday == Calendar.SUNDAY) {
             return new String[]{HOLIDAY_START_TIME, HOLIDAY_END_TIME};
         }
         int month = Integer.valueOf(formatDate(date).substring(5, 7));

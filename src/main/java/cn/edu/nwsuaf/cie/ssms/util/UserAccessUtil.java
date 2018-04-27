@@ -58,17 +58,7 @@ public class UserAccessUtil {
     }
 
     public static List<String> getAdmin(int page, int nums) {
-        int[] pageInfo = PageUtil.getPage(page, nums);
-        int size = ADMINS.size();
-        int startPos = pageInfo[0];
-        if (startPos >= size) {
-            return new ArrayList<>(0);
-        }
-        int endPos = pageInfo[0] + pageInfo[1];
-        if (endPos > size) {
-            endPos = size;
-        }
-        return new ArrayList<>(ADMINS).subList(startPos, endPos);
+        return new ArrayList<>(ADMINS);
     }
 
     public static boolean isAdmin(String uid) {

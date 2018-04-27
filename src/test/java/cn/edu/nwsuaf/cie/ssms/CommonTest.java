@@ -3,6 +3,7 @@ package cn.edu.nwsuaf.cie.ssms;
 import cn.edu.nwsuaf.cie.ssms.model.Access;
 import cn.edu.nwsuaf.cie.ssms.model.User;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
+import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
 import org.junit.Before;
@@ -30,7 +31,7 @@ public class CommonTest {
     @Before
     public void before() {
         User user = new User();
-        user.setUid("2014012597");
+        user.setUid("2014012586");
         user.setAccess(Access.ADMIN);
         userHolder.setUser(user);
     }
@@ -41,10 +42,12 @@ public class CommonTest {
         Random random = new Random();
         int gid = random.nextInt(12);
         String date = TimeUtil.formatDate(new Date());
-        String startTime = date + " 16:30";
-        String endTime = date + " 18:30";
-        if (!orderService.orderAndPay(gid, startTime, endTime).isSuccess()) {
-            System.out.println("插入数据失败");
+        String startTime = date + " 18:30";
+        String endTime = date + " 20:30";
+        Result result = orderService.order(gid, startTime, endTime);
+//        if (!orderService.orderAndPay(gid, startTime, endTime).isSuccess()) {
+        if (!result.isSuccess()) {
+            System.out.println("插入数据失败 : " + result.getMsg());
         } else {
             System.out.println("插入成功");
         }

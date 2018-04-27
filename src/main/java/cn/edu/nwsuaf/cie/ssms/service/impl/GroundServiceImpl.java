@@ -90,7 +90,6 @@ public class GroundServiceImpl implements GroundService {
         }
         JSONObject json = new JSONObject();
         String[] openTime = TimeUtil.getOpenTime(date);
-//        String[] openTime = new String[]{"15:00", "22:00"};
         String startTime = openTime[0];
         String endTime = openTime[1];
         json.put("startTime", startTime);

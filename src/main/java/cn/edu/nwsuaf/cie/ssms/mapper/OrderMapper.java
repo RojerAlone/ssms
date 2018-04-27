@@ -23,23 +23,24 @@ public interface OrderMapper {
     @Select("select * from `order` where id = #{id}")
     Order selectByPrimaryKey(Integer id);
 
-//    @Select("select count(`id`) from `order` where `gid` = #{gid} and `stat` != #{stat} " +
-//            "and (`start_time` <= #{startTime} and `end_time` >= #{startTime}) " +
-//            "or (`start_time` <= #{endTime} and `end_time` >= #{endTime})")
     @Select("select count(`id`) from `order` where `gid` = #{gid} and `stat` != #{stat} " +
-            "and (`start_time` between #{startTime} and #{endTime} " +
-            "or `end_time` between #{startTime} and #{endTime})")
+            "and ((`start_time` < #{startTime} and `end_time` > #{startTime}) " +
+            "or (`start_time` < #{endTime} and `end_time` > #{endTime})" +
+            "or (`start_time` = #{startTime} and `end_time` = #{endTime}))")
+//    @Select("select count(`id`) from `order` where `gid` = #{gid} and `stat` != #{stat} " +
+//            "and (`start_time` between #{startTime} and #{endTime} " +
+//            "or `end_time` between #{startTime} and #{endTime})")
     int selectNumsBetweenTimeByGroundAndExcludeStat(@Param("gid") Integer ground,
                                                     @Param("startTime") Date startTime,
                                                     @Param("endTime") Date endTime,
                                                     @Param("stat") Integer stat);
 
-    @Select("select * from `order` where uid = #{uid} limit #{nums}")
-    List<Order> selectByUid(@Param("uid") String uid, @Param("nums") int nums);
-
     @Select("select * from `order` where uid = #{uid} and stat = #{stat} order by ctime desc limit #{page}, #{nums}")
     List<Order> selectByUidAndStat(@Param("uid") String uid, @Param("stat") int stat,
                                    @Param("page") int page, @Param("nums") int nums);
+
+    @Select("select count(id) from `order` where uid = #{uid} and stat = #{stat}")
+    int selectCountByUidAndStat(@Param("uid") String uid, @Param("stat") int stat);
 
     @Select("select * from `order` where uid = #{uid} and stat = #{stat} and (`start_time` between #{startDate} and #{endDate})")
     List<Order> selectByStatAndUidAndTime(@Param("uid") String uid, @Param("stat") int stat,
@@ -47,6 +48,9 @@ public interface OrderMapper {
 
     @Select("select * from `order` where stat = #{stat} order by start_time desc limit #{page}, #{nums}")
     List<Order> selectByStat(@Param("stat") int stat, @Param("page") int page, @Param("nums") int nums);
+
+    @Select("select count(id) from `order` where stat = #{stat}")
+    int selectCountByStat(int stat);
 
     /**
      * 使用 TO_DAYS() 函数来获取从公元0年到指定日期经过的天数，从而确定是不是同一天

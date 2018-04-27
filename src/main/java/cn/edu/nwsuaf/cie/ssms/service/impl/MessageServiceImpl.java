@@ -6,10 +6,13 @@ import cn.edu.nwsuaf.cie.ssms.service.MessageService;
 import cn.edu.nwsuaf.cie.ssms.util.PageUtil;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by zhangrenjie on 2018-04-23
@@ -57,6 +60,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Result getMessageByPage(int page, int nums) {
         int[] pageInfo = PageUtil.getPage(page, nums);
-        return Result.success(messageMapper.selectByStatAndPage(Message.STAT_OK, pageInfo[0], pageInfo[1]));
+        int total = messageMapper.selectCountByStat(Message.STAT_OK);
+        List<Message> messages = messageMapper.selectByStatAndPage(Message.STAT_OK, pageInfo[0], pageInfo[1]);
+        JSONObject json = new JSONObject();
+        json.put("total", total);
+        json.put("data", messages);
+        return Result.success(json);
     }
 }

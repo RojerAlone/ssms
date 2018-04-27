@@ -59,41 +59,44 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Result getNotPaiedOrders(int page, int nums) {
-        int[] pageInfo = PageUtil.getPage(page, nums);
-        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_NOT_PAY,
-                pageInfo[0], pageInfo[1]));
+        return getOrderByUidAndStat(userHolder.getUser().getUid(), Order.STAT_NOT_PAY, page, nums);
     }
 
     @Override
     public Result getAllNotPaidOrders(int page, int nums) {
         int[] pageInfo = PageUtil.getPage(page, nums);
-        return Result.success(orderMapper.selectByStat(Order.STAT_NOT_PAY, pageInfo[0], pageInfo[1]));
+        int total = orderMapper.selectCountByStat(Order.STAT_NOT_PAY);
+        List<Order> orders = orderMapper.selectByStat(Order.STAT_NOT_PAY, pageInfo[0], pageInfo[1]);
+        JSONObject  json = new JSONObject();
+        json.put("total", total);
+        json.put("data", orders);
+        return Result.success(json);
     }
 
     @Override
     public Result getAllPaidOrders(int page, int nums) {
         int[] pageInfo = PageUtil.getPage(page, nums);
-        return Result.success(orderMapper.selectByStat(Order.STAT_PAIED, pageInfo[0], pageInfo[1]));
+        int total = orderMapper.selectCountByStat(Order.STAT_PAIED);
+        List<Order> orders = orderMapper.selectByStat(Order.STAT_PAIED, pageInfo[0], pageInfo[1]);
+        JSONObject  json = new JSONObject();
+        json.put("total", total);
+        json.put("data", orders);
+        return Result.success(json);
     }
 
     @Override
     public Result searchByUid(String uid, int page, int nums) {
-        int[] pageInfo = PageUtil.getPage(page, nums);
-        return Result.success(orderMapper.selectByUidAndStat(uid, Order.STAT_NOT_PAY, pageInfo[0], pageInfo[1]));
+        return getOrderByUidAndStat(uid, Order.STAT_NOT_PAY, page, nums);
     }
 
     @Override
     public Result getPaiedOrders(int page, int nums) {
-        int[] pageInfo = PageUtil.getPage(page, nums);
-        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_PAIED,
-                pageInfo[0], pageInfo[1]));
+        return getOrderByUidAndStat(userHolder.getUser().getUid(), Order.STAT_PAIED, page, nums);
     }
 
     @Override
     public Result getCanceledOrders(int page, int nums) {
-        int[] pageInfo = PageUtil.getPage(page, nums);
-        return Result.success(orderMapper.selectByUidAndStat(userHolder.getUser().getUid(), Order.STAT_CANCEL,
-                pageInfo[0], pageInfo[1]));
+        return getOrderByUidAndStat(userHolder.getUser().getUid(), Order.STAT_CANCEL, page, nums);
     }
 
     @Override
@@ -230,8 +233,7 @@ public class OrderServiceImpl implements OrderService {
         }
         try {
             lock.lock();
-            if (orderMapper.selectNumsBetweenTimeByGroundAndExcludeStat(gid, startDateTime, endDateTime, Order.STAT_CANCEL) > 0
-                    || CommonService.isUsed(gid, startDateTime, endDateTime)) {
+            if (CommonService.isUsed(gid, startDateTime, endDateTime)) {
                 return Result.error(MsgCenter.GROUND_ORDERED);
             }
             Order order = new Order();
@@ -254,6 +256,16 @@ public class OrderServiceImpl implements OrderService {
         } finally {
             lock.unlock();
         }
+    }
+
+    private Result getOrderByUidAndStat(String uid, int stat, int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        int total = orderMapper.selectCountByUidAndStat(uid, stat);
+        List<Order> orders = orderMapper.selectByUidAndStat(uid, stat, pageInfo[0], pageInfo[1]);
+        JSONObject json = new JSONObject();
+        json.put("total", total);
+        json.put("data", orders);
+        return Result.success(json);
     }
 
     @Scheduled(fixedRate = 1000 * 60)

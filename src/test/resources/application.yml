@@ -32,3 +32,6 @@ properties:
     holiday:
       start: '15:00'
       end: '22:00'
+logging:
+  level:
+    cn.edu.nwsuaf.cie.ssms.mapper: debug
