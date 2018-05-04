@@ -6,6 +6,7 @@ import cn.edu.nwsuaf.cie.ssms.service.OrderService;
 import cn.edu.nwsuaf.cie.ssms.util.Result;
 import cn.edu.nwsuaf.cie.ssms.util.TimeUtil;
 import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +42,7 @@ public class CommonTest {
         System.out.println(System.currentTimeMillis());
         Random random = new Random();
         int gid = random.nextInt(12);
-        String date = TimeUtil.formatDate(new Date());
+        String date = TimeUtil.formatDate(DateUtils.addDays(new Date(),1 ));
         String startTime = date + " 18:30";
         String endTime = date + " 20:30";
         Result result = orderService.order(gid, startTime, endTime);

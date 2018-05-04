@@ -3,14 +3,13 @@ package cn.edu.nwsuaf.cie.ssms.service.impl;
 import cn.edu.nwsuaf.cie.ssms.mapper.CloseInfoMapper;
 import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
 import cn.edu.nwsuaf.cie.ssms.service.CloseInfoService;
-import cn.edu.nwsuaf.cie.ssms.util.MsgCenter;
-import cn.edu.nwsuaf.cie.ssms.util.PageUtil;
-import cn.edu.nwsuaf.cie.ssms.util.Result;
-import cn.edu.nwsuaf.cie.ssms.util.UserHolder;
+import cn.edu.nwsuaf.cie.ssms.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
 
 /**
  * Created by RojerAlone on 2017-12-05.
@@ -23,11 +22,23 @@ public class CloseInfoServiceImpl implements CloseInfoService {
     @Autowired
     private CloseInfoMapper closeInfoMapper;
 
-    @Autowired
-    private UserHolder userHolder;
-
     @Override
-    public Result close(CloseInfo closeInfo) {
+    public Result close(String startDate, String startTime, String endDate, String endTime, String reason) {
+        CloseInfo closeInfo = new CloseInfo();
+        try {
+            closeInfo.setStartDate(TimeUtil.parseDate(startDate));
+            closeInfo.setEndDate(TimeUtil.parseDate(endDate));
+            if (startTime != null) {
+                closeInfo.setStartTime(TimeUtil.parseTime(startTime));
+            }
+            if (endTime != null) {
+                closeInfo.setEndTime(TimeUtil.parseTime(endTime));
+            }
+        } catch (ParseException e) {
+            LOGGER.error("add close parse time error", e);
+            return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
+        }
+        closeInfo.setReason(reason);
         if (closeInfoMapper.insert(closeInfo) == 1) {
             return Result.success();
         } else {

@@ -1,7 +1,6 @@
 package cn.edu.nwsuaf.cie.ssms.service;
 
 import cn.edu.nwsuaf.cie.ssms.mapper.CloseInfoMapper;
-import cn.edu.nwsuaf.cie.ssms.mapper.LongOrderMapper;
 import cn.edu.nwsuaf.cie.ssms.mapper.OrderMapper;
 import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
 import cn.edu.nwsuaf.cie.ssms.model.Order;
@@ -23,7 +22,6 @@ public class CommonService {
 
     private static OrderMapper orderMapper;
     private static CloseInfoMapper closeInfoMapper;
-    private static LongOrderMapper longOrderMapper;
     private static CommonCache cache;
 
     @Autowired
@@ -34,11 +32,6 @@ public class CommonService {
     @Autowired
     public void setCloseInfoMapper(CloseInfoMapper closeInfoMapper) {
         CommonService.closeInfoMapper = closeInfoMapper;
-    }
-
-    @Autowired
-    public void setLongOrderMapper(LongOrderMapper longOrderMapper) {
-        CommonService.longOrderMapper = longOrderMapper;
     }
 
     @Autowired
@@ -55,8 +48,8 @@ public class CommonService {
                 gid, startDateTime, endDateTime, Order.STAT_CANCEL) > 0) {
             return true;
         }
-        // 如果场地没有被预订，查看该场地是否被关闭
-        List<CloseInfo> closeInfos = closeInfoMapper.selectByGidAndStatAndCloseDate(gid, CloseInfo.STAT_OK, startDateTime);
+        // 查看场地是否被关闭
+        List<CloseInfo> closeInfos = closeInfoMapper.selectByGidAndStatAndCloseDate(CloseInfo.STAT_OK, startDateTime);
         if (!closeInfos.isEmpty()) {
             for (CloseInfo closeInfo : closeInfos) {
                 if (closeInfo.getStartTime() == null

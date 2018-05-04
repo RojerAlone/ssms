@@ -53,7 +53,7 @@ public class CloseInfoMapperTest {
     public void selectByGidAndStatAndCloseDate() throws Exception {
         String startStr = "2017-12-07 20:40:30";
         Date startTime = TimeUtil.parseDate(startStr);
-        List<CloseInfo> list = closeInfoMapper.selectByGidAndStatAndCloseDate(1, CloseInfo.STAT_OK, startTime);
+        List<CloseInfo> list = closeInfoMapper.selectByGidAndStatAndCloseDate(CloseInfo.STAT_OK, startTime);
         LOGGER.info("result : {}", list);
         assertTrue(!list.isEmpty());
     }

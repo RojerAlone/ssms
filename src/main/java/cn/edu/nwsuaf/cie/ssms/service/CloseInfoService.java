@@ -8,7 +8,7 @@ import cn.edu.nwsuaf.cie.ssms.util.Result;
  */
 public interface CloseInfoService {
 
-    Result close(CloseInfo closeInfo);
+    Result close(String startDate, String startTime, String endDate, String endTime, String reason);
 
     Result delete(int id);
 

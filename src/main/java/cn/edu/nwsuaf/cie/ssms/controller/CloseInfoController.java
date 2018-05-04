@@ -25,19 +25,12 @@ public class CloseInfoController extends AbstractController {
     }
 
     @PutMapping("add")
-    public Result insert(@PathVariable("ground") int gid, @RequestParam("date") Date closeDate,
-                         @RequestParam(value = "startTime", required = false) Date startTime,
-                         @RequestParam(value = "endDate", required = false) Date endDate,
-                         @RequestParam(value = "endTime", required = false) Date endTime,
+    public Result insert(@RequestParam("startDate") String startDate,
+                         @RequestParam(value = "endDate") String endDate,
+                         @RequestParam(value = "startTime", required = false) String startTime,
+                         @RequestParam(value = "endTime", required = false) String endTime,
                          @RequestParam(value = "reason", required = false) String reason) {
-        CloseInfo closeInfo = new CloseInfo();
-        closeInfo.setGid(gid);
-        closeInfo.setStartDate(closeDate);
-        closeInfo.setStartTime(startTime);
-        closeInfo.setEndDate(endDate);
-        closeInfo.setEndTime(endTime);
-        closeInfo.setReason(reason);
-        return closeInfoService.close(closeInfo);
+        return closeInfoService.close(startDate, startTime, endDate, endTime, reason);
     }
 
     @DeleteMapping("{id}")

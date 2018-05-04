@@ -21,11 +21,9 @@ public interface CloseInfoMapper {
     @Update("update closeinfo set stat = #{stat} where id = #{id}")
     int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);
 
-//    @Select("select * from closeinfo where gid = #{gid} and stat = #{stat} and #{startDate} between start_date and end_date")
-//    List<CloseInfo> selectByGidAndStatAndCloseDate(@Param("gid") int gid, @Param("stat") int stat,
-//                                                   @Param("startDate") Date startDate);
-    @SelectProvider(type = SQLBuilder.class, method = "selectByGidAndStatAndCloseDate")
-    List<CloseInfo> selectByGidAndStatAndCloseDate(int gid, int stat, Date startDate);
+    @Select("select * from closeinfo where stat = #{stat} and #{startDate} between start_date and end_date")
+    List<CloseInfo> selectByGidAndStatAndCloseDate(@Param("stat") int stat, @Param("startDate") Date startDate);
+//    List<CloseInfo> selectByGidAndStatAndCloseDate(int gid, int stat, Date startDate);
 
     /**
      * 根据闭馆信息的状态和时间查询
@@ -41,29 +39,17 @@ public interface CloseInfoMapper {
         public String insert(final CloseInfo closeInfo) {
             return new SQL(){{
                 INSERT_INTO("closeinfo");
-                VALUES("gid", String.valueOf(closeInfo.getGid()));
-                VALUES("start_date", "'" + TimeUtil.formatDate(closeInfo.getStartDate()) + "'");
-                VALUES("end_date", "'" + TimeUtil.formatDate(closeInfo.getEndDate()) + "'");
-                VALUES("start_time", "'" + TimeUtil.formatTime(closeInfo.getStartTime()) + "'");
+                VALUES("start_date", "#{startDate}");
+                VALUES("end_date", "#{endDate}");
+                if (closeInfo.getStartTime() != null) {
+                    VALUES("start_time", "#{startTime}");
+                }
                 if (closeInfo.getEndTime() != null) {
-                    VALUES("end_time", "'" + TimeUtil.formatTime(closeInfo.getEndTime()) + "'");
+                    VALUES("end_time", "#{endTime}");
                 }
                 if (closeInfo.getReason() != null) {
-                    VALUES("reason", closeInfo.getReason());
+                    VALUES("reason", "#{reason}");
                 }
-            }
-            }.toString();
-        }
-
-        public String selectByGidAndStatAndCloseDate(int gid, int stat, Date startDate) {
-            return new SQL() {{
-                SELECT("*");
-                FROM("closeinfo");
-                WHERE("gid = " + gid);
-                AND();
-                WHERE("stat = " + stat);
-                AND();
-                WHERE("'" + TimeUtil.formatDate(startDate) + "' between start_date and end_date");
             }
             }.toString();
         }
