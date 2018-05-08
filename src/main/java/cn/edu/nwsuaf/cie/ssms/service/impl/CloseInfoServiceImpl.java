@@ -4,12 +4,14 @@ import cn.edu.nwsuaf.cie.ssms.mapper.CloseInfoMapper;
 import cn.edu.nwsuaf.cie.ssms.model.CloseInfo;
 import cn.edu.nwsuaf.cie.ssms.service.CloseInfoService;
 import cn.edu.nwsuaf.cie.ssms.util.*;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * Created by RojerAlone on 2017-12-05.
@@ -58,6 +60,12 @@ public class CloseInfoServiceImpl implements CloseInfoService {
     @Override
     public Result getAll(int page, int nums) {
         int[] pageInfo = PageUtil.getPage(page, nums);
-        return Result.success(closeInfoMapper.selectByStatAndNums(CloseInfo.STAT_OK, pageInfo[0], pageInfo[1]));
+        int stat = CloseInfo.STAT_OK;
+        List<CloseInfo> infos = closeInfoMapper.selectByStatAndNums(stat, pageInfo[0], pageInfo[1]);
+        int total = closeInfoMapper.selectCountByStat(stat);
+        JSONObject json = new JSONObject();
+        json.put("total", total);
+        json.put("data", infos);
+        return Result.success();
     }
 }

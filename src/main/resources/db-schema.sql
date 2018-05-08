@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `ssms`.`closeinfo` (
   `reason` VARCHAR(100) DEFAULT NULL COMMENT '不开放原因',
   `stat` INT NOT NULL DEFAULT 0 COMMENT '0 表示正常，1 表示已删除',
   PRIMARY KEY (`id`)
-) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '闭馆信息，也存储特殊占用的订单';
+) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '闭馆信息';
 
 -- 健美操室只有两个时间段，课余时间和晚自习时间，预订课余时间开始为为 00:00，晚自习时间为 20:00
 CREATE TABLE IF NOT EXISTS `ssms`.`order` (
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `ssms`.`order` (
   `stat` INT NOT NULL DEFAULT 0 COMMENT '订单状态，0 表示未支付，1 表示已支付，2 表示已取消',
   `ctime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建订单时间',
   PRIMARY KEY (`id`),
-  INDEX `group`(`gid`),
+  INDEX `ground`(`gid`),
   INDEX `time`(`start_time`, `end_time`)
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8 COMMENT '订单信息';
 

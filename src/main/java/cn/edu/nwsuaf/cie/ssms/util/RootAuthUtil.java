@@ -31,6 +31,7 @@ public class RootAuthUtil {
     }
 
     private static String pswdGenerator(String password) {
+        // 使用 Spring Framework 提供的 DigestUtils 进行 MD5 加密
         return DigestUtils.md5DigestAsHex((password + SALT).getBytes());
     }
 

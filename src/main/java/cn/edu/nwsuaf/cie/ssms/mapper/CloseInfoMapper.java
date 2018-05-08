@@ -18,6 +18,9 @@ public interface CloseInfoMapper {
     @Select("select * from closeinfo where stat = #{stat} limit #{page}, #{nums}")
     List<CloseInfo> selectByStatAndNums(@Param("stat") int stat, @Param("page") int page, @Param("nums") int nums);
 
+    @Select("select count(id) from closeinfo where stat = #{stat}")
+    int selectCountByStat(int stat);
+
     @Update("update closeinfo set stat = #{stat} where id = #{id}")
     int updateStatById(@Param(value = "id") int id, @Param(value = "stat") int stat);
 
