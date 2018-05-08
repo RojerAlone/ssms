@@ -66,6 +66,6 @@ public class CloseInfoServiceImpl implements CloseInfoService {
         JSONObject json = new JSONObject();
         json.put("total", total);
         json.put("data", infos);
-        return Result.success();
+        return Result.success(json);
     }
 }
