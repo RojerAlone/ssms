@@ -135,8 +135,9 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.error("orderGymnastics - inner error", e);
             return Result.innerError();
         }
-        if (CommonService.isUsed(Ground.GYMNASTICS_ID, tmpDate, tmpDate)) {
-            return Result.error(MsgCenter.GROUND_ORDERED);
+        String reason = CommonService.isUsed(Ground.GYMNASTICS_ID, tmpDate, tmpDate);
+        if (reason != null) {
+            return Result.error(reason);
         }
         order.setStartTime(tmpDate);
         order.setEndTime(tmpDate);
@@ -252,8 +253,9 @@ public class OrderServiceImpl implements OrderService {
         }
         try {
             lock.lock();
-            if (CommonService.isUsed(gid, startDateTime, endDateTime)) {
-                return Result.error(MsgCenter.GROUND_ORDERED);
+            String reason = CommonService.isUsed(gid, startDateTime, endDateTime);
+            if (reason != null) {
+                return Result.error(reason);
             }
             Order order = new Order();
             order.setGid(gid);

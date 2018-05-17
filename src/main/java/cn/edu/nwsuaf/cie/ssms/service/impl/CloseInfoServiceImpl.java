@@ -30,10 +30,10 @@ public class CloseInfoServiceImpl implements CloseInfoService {
         try {
             closeInfo.setStartDate(TimeUtil.parseDate(startDate));
             closeInfo.setEndDate(TimeUtil.parseDate(endDate));
-            if (startTime != null) {
+            if (startTime != null && !startTime.isEmpty()) {
                 closeInfo.setStartTime(TimeUtil.parseTime(startTime));
             }
-            if (endTime != null) {
+            if (endTime != null && !startTime.isEmpty()) {
                 closeInfo.setEndTime(TimeUtil.parseTime(endTime));
             }
         } catch (ParseException e) {

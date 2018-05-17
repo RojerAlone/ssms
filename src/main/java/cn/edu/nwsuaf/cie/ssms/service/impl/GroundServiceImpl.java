@@ -56,7 +56,7 @@ public class GroundServiceImpl implements GroundService {
             return Result.errorParam();
         }
         for (Ground ground : grounds) {
-            if (CommonService.isUsed(ground.getId(), startDateTime, endDateTime)) {
+            if (CommonService.isUsed(ground.getId(), startDateTime, endDateTime) != null) {
                 ground.setUsed();
             }
         }

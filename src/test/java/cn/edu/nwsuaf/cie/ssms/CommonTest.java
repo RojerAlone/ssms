@@ -42,7 +42,8 @@ public class CommonTest {
         System.out.println(System.currentTimeMillis());
         Random random = new Random();
         int gid = random.nextInt(12);
-        String date = TimeUtil.formatDate(DateUtils.addDays(new Date(),1 ));
+//        String date = TimeUtil.formatDate(DateUtils.addDays(new Date(),1 ));
+        String date = TimeUtil.formatDate(new Date());
         String startTime = date + " 18:30";
         String endTime = date + " 20:30";
         Result result = orderService.order(gid, startTime, endTime);
