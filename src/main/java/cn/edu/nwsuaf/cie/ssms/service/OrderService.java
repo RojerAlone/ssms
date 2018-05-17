@@ -13,6 +13,9 @@ public interface OrderService {
 
     Result getAllNotPaidOrders(int page, int nums);
 
+    /**
+     * 获取已经支付的羽毛球订单
+     */
     Result getAllPaidOrders(int page, int nums);
 
     Result searchByUid(String uid, int page, int nums);
@@ -49,5 +52,7 @@ public interface OrderService {
     Result getPersonalSportTime();
 
     Result getAllSportTime();
+
+    Result getGymnasticsOrders(int page, int nums);
 
 }

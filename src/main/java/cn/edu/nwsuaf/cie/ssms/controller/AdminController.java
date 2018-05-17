@@ -1,10 +1,8 @@
 package cn.edu.nwsuaf.cie.ssms.controller;
 
-import cn.edu.nwsuaf.cie.ssms.model.Ground;
+import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.service.MessageService;
 import cn.edu.nwsuaf.cie.ssms.service.OrderService;
-import cn.edu.nwsuaf.cie.ssms.util.UserAccessUtil;
-import cn.edu.nwsuaf.cie.ssms.service.CommonService;
 import cn.edu.nwsuaf.cie.ssms.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +45,12 @@ public class AdminController extends AbstractController {
     @PostMapping("/gymnastics")
     public Result orderGymnastics(@RequestParam String date, @RequestParam int time) {
         return orderService.orderGymnastics(date, time);
+    }
+
+    @GetMapping("/gymnastics")
+    public Result getGymnastics(@RequestParam(value = "page", defaultValue = "1") int page,
+                                @RequestParam(value = "nums", defaultValue = "10") int nums) {
+        return orderService.getGymnasticsOrders(page, nums);
     }
 
     @DeleteMapping("/gymnastics/{id}")

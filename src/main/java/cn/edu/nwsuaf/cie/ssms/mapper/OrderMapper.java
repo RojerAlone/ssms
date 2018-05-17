@@ -35,21 +35,21 @@ public interface OrderMapper {
                                                     @Param("endTime") Date endTime,
                                                     @Param("stat") Integer stat);
 
-    @Select("select * from `order` where uid = #{uid} and stat = #{stat} order by ctime desc limit #{page}, #{nums}")
+    @Select("select * from `order` where gid <= 12 and uid = #{uid} and stat = #{stat} order by ctime desc limit #{page}, #{nums}")
     List<Order> selectByUidAndStat(@Param("uid") String uid, @Param("stat") int stat,
                                    @Param("page") int page, @Param("nums") int nums);
 
-    @Select("select count(id) from `order` where uid = #{uid} and stat = #{stat}")
+    @Select("select count(id) from `order` where gid <= 12 and uid = #{uid} and stat = #{stat}")
     int selectCountByUidAndStat(@Param("uid") String uid, @Param("stat") int stat);
 
     @Select("select * from `order` where uid = #{uid} and stat = #{stat} and (`start_time` between #{startDate} and #{endDate})")
     List<Order> selectByStatAndUidAndTime(@Param("uid") String uid, @Param("stat") int stat,
                                           @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Select("select * from `order` where stat = #{stat} order by start_time desc limit #{page}, #{nums}")
+    @Select("select * from `order` where gid <= 12 and stat = #{stat} order by start_time desc limit #{page}, #{nums}")
     List<Order> selectByStat(@Param("stat") int stat, @Param("page") int page, @Param("nums") int nums);
 
-    @Select("select count(id) from `order` where stat = #{stat}")
+    @Select("select count(id) from `order` where gid <= 12 and stat = #{stat}")
     int selectCountByStat(int stat);
 
     /**
@@ -65,6 +65,12 @@ public interface OrderMapper {
     @Select("select * from `order` where stat = #{stat} and TO_DAYS(start_time) >= TO_DAYS(#{startDate}) and TO_DAYS(start_time) <= TO_DAYS(#{endDate})")
     List<Order> selectByStatAndDates(@Param("stat") int stat, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
+    @Select("select * from `order` where gid = 13 and stat = #{stat} order by ctime desc limit #{page}, #{nums}")
+    List<Order> selectGymnasticsOrders(@Param("stat") int stat, @Param("page") int page, @Param("nums") int nums);
+
+    @Select("select count(id) from `order` where gid = 13 and stat = #{stat}")
+    int selectGymnasticsCount(@Param("stat") int stat);
+
     @Update("update `order` set stat=#{stat} where id = #{id}")
     int updateStatById(@Param("id") int id, @Param("stat") int stat);
 
@@ -73,7 +79,6 @@ public interface OrderMapper {
 
     @UpdateProvider(type = SQLBuilder.class, method = "buildUpdate")
     int updateByPrimaryKeySelective(Order order);
-
 
     class SQLBuilder {
         public String buildUpdate(final Order order) {

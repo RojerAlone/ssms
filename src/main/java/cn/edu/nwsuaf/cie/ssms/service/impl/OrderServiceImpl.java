@@ -194,6 +194,25 @@ public class OrderServiceImpl implements OrderService {
         return Result.success(parseSportTimeInfo(orders));
     }
 
+    @Override
+    public Result getGymnasticsOrders(int page, int nums) {
+        int[] pageInfo = PageUtil.getPage(page, nums);
+        int total = orderMapper.selectGymnasticsCount(Order.STAT_PAIED);
+        List<Order> orders = orderMapper.selectGymnasticsOrders(Order.STAT_PAIED, pageInfo[0], pageInfo[1]);
+        JSONArray orderArray = new JSONArray(orders.size());
+        for (Order order : orders) {
+            JSONObject orderInfo = new JSONObject();
+            orderInfo.put("id", order.getId());
+            orderInfo.put("startDate", TimeUtil.formatDate(order.getStartTime()));
+            orderInfo.put("type", TimeUtil.formatTime(order.getStartTime()).equals(Ground.GYMNASTICS_REST_TIME) ? 0 : 1);
+            orderArray.add(orderInfo);
+        }
+        JSONObject json = new JSONObject();
+        json.put("total", total);
+        json.put("data", orderArray);
+        return Result.success(json);
+    }
+
     private JSONArray parseSportTimeInfo(List<Order> orders) {
         // 格式为 日期-时长
         Map<String, Long> sportTime = new HashMap<>(COUNT_DAYS);

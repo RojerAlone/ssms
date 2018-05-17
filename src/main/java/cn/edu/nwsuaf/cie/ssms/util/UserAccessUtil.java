@@ -46,10 +46,12 @@ public class UserAccessUtil {
     }
 
     public static void addAdmin(String... uids) {
-        ADMINS.addAll(Arrays.asList(uids));
         for (String uid : uids) {
-            workerMapper.insert(uid);
+            if (!ADMINS.contains(uid)) {
+                workerMapper.insert(uid);
+            }
         }
+        ADMINS.addAll(Arrays.asList(uids));
     }
 
     public static void removeAdmin(String uid) {

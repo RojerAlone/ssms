@@ -19,8 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zhangrenjie on 2017-12-06
@@ -100,22 +99,30 @@ public class GroundServiceImpl implements GroundService {
 
     @Override
     public Result getGymnasticsInfo() {
+        int countDay = 7;
         Date startDate = new Date();
-        Date endDate = DateUtils.addDays(startDate, 12);
+        Date endDate = DateUtils.addDays(startDate, countDay - 1);
         List<Order> orders = orderMapper.selectGymnasticsByDatesAndStat(Order.STAT_PAIED, startDate, endDate);
-        JSONArray data = new JSONArray();
+        Set<String> orderSet = new HashSet<>(orders.size());
         for (Order order : orders) {
-            try {
-                int time = TimeUtil.formatTime(order.getStartTime()).equals(Ground.GYMNASTICS_REST_TIME) ? 0 : 1;
-                int distanceDays = TimeUtil.distanceDays(order.getStartTime(), startDate);
-                data.add(new int[]{time, distanceDays, order.getStat()});
-            } catch (ParseException e) {
-                LOGGER.error("time parse error", e);
-                return Result.error(String.format(MsgCenter.ERROR_TIME_FORMAT, e.getMessage()));
-            }
+            int time = TimeUtil.formatTime(order.getStartTime()).equals(Ground.GYMNASTICS_REST_TIME) ? 0 : 1;
+            orderSet.add(TimeUtil.formatDate(order.getStartTime()) + "_" + time);
         }
-        JSONObject json = new JSONObject();
-        json.put("data", data);
-        return Result.success(json);
+        JSONArray arrayData = new JSONArray(countDay);
+        for (int day = 0; day < countDay; day++) {
+            JSONObject data = new JSONObject();
+            String date = TimeUtil.formatDate(DateUtils.addDays(startDate, day));
+            data.put("date", date);
+            JSONObject json0 = new JSONObject(1);
+            json0.put("used", orderSet.contains(date + "_0"));
+            JSONObject json1 = new JSONObject(1);
+            json1.put("used", orderSet.contains(date + "_1"));
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add(json0);
+            jsonArray.add(json1);
+            data.put("data", jsonArray);
+            arrayData.add(data);
+        }
+        return Result.success(arrayData);
     }
 }
