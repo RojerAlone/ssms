@@ -34,7 +34,7 @@ public class AdminController extends AbstractController {
         if (!UserAccessUtil.isAdmin(uid)) {
             return Result.error(MsgCenter.ERROR_AUTH);
         }
-        return LoginResultUtil.parseResult(CommonService.login(uid, authToken), response, 1);
+        return LoginResultUtil.parseResult(uid, CommonService.login(uid, authToken), response, 1);
     }
 
     @PutMapping("/payment/{id}")

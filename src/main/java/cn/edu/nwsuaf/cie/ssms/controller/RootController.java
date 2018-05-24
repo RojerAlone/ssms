@@ -22,7 +22,7 @@ public class RootController {
     @PostMapping("/login")
     public Result login(@RequestParam("username") String username, @RequestParam("password") String password,
                         HttpServletResponse response) {
-        return LoginResultUtil.parseResult(rootService.login(username, password), response, 1);
+        return LoginResultUtil.parseResult(UserAccessUtil.ROOT, rootService.login(username, password), response, 1);
     }
 
     @PutMapping("/admin/{uid}")

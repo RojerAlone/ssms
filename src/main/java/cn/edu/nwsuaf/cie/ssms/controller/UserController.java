@@ -27,7 +27,7 @@ public class UserController extends AbstractController {
         if (userHolder.getUser() != null && userHolder.getUser().getUid().equals(uid)) {
             return Result.success();
         }
-        return LoginResultUtil.parseResult(CommonService.login(uid, authToken), response, 7);
+        return LoginResultUtil.parseResult(uid, CommonService.login(uid, authToken), response, 7);
     }
 
     @GetMapping("sport")

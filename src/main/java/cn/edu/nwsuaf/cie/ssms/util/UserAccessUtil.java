@@ -19,7 +19,7 @@ public class UserAccessUtil {
 
     private static WorkerMapper workerMapper;
 
-    private static String ROOT;
+    public static String ROOT;
 
     private static final Set<String> ADMINS = new HashSet<>();
 

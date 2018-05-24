@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LoginResultUtil {
 
-    public static Result parseResult(Result result, HttpServletResponse response, int days) {
+    public static Result parseResult(String uid, Result result, HttpServletResponse response, int days) {
         if (result.isSuccess()) {
             Cookie cookie = new Cookie("token", (String) result.getResult());
             cookie.setPath("/");
             cookie.setMaxAge((int) (TimeUtil.ONE_DAY * days / 1000)); // 设置 cookie 有效期
             response.addCookie(cookie);
-            return Result.success();
+            return Result.success(UserAccessUtil.getAccess(uid).name());
         } else {
             return result;
         }
