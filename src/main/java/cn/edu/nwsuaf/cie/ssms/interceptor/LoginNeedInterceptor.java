@@ -21,7 +21,6 @@ public class LoginNeedInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        return userHolder.getUser() != null;
         // 如果没有登录，跳转到特定的url
         if (userHolder.getUser() == null) {
             response.sendRedirect("/notLogin");

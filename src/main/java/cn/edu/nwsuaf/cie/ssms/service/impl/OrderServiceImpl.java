@@ -253,6 +253,7 @@ public class OrderServiceImpl implements OrderService {
         }
         try {
             lock.lock();
+            // 判断场地是否可以使用，如果不可以使用返回原因
             String reason = CommonService.isUsed(gid, startDateTime, endDateTime);
             if (reason != null) {
                 return Result.error(reason);
