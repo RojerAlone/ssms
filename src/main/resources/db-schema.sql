@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `ssms`.`closeinfo` (
   PRIMARY KEY (`id`)
 ) ENGINE = MyISAM DEFAULT CHARSET = UTF8 COMMENT '闭馆信息';
 
--- 健美操室只有两个时间段，课余时间和晚自习时间，预订课余时间开始为为 00:00，晚自习时间为 20:00
+-- 健美操室只有两个时间段，课余时间和晚自习时间，预订课余时间开始为 00:00，晚自习时间为 20:00
 CREATE TABLE IF NOT EXISTS `ssms`.`order` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '订单ID',
   `gid` INT NOT NULL COMMENT '场地ID',
