@@ -6,6 +6,6 @@
 客户端为 Vue 开发的移动端 APP，没有源码。
 
 ## 开发环境
-- SpringBoot 1.5.8
+- SpringBoot 2.1.3
 - Maven 3.5.2
 - MySQL 5.7 +
